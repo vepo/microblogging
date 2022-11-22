@@ -29,6 +29,7 @@
         <junit.jupiter.version>5.9.0-M1</junit.jupiter.version>
         <assertj.version>3.23.1</assertj.version>
         <jacoco.version>0.8.8</jacoco.version>
+        <sonar.coverage.exclusions>**src/test/**</sonar.coverage.exclusions>
     </properties>
 
     <dependencyManagement>

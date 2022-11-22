@@ -163,7 +163,9 @@ class PostEndpointTest {
                                 .thenReturn();
                 var body = response.jsonPath()
                                 .getList(".", Post.class);
-                assertThat(body).doesNotContain(post);
+                assertThat(body)
+                                .isNotEmpty()
+                                .doesNotContain(post);
 
         }
 }
