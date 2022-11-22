@@ -9,6 +9,10 @@ import static org.assertj.core.condition.VerboseCondition.verboseCondition;
 import static org.hamcrest.Matchers.matchesPattern;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import java.util.Map;
+
+import org.hamcrest.Matcher;
+import org.hamcrest.Matchers;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
 import org.junit.jupiter.api.Order;
@@ -27,8 +31,8 @@ import io.vepo.microblogging.infra.CustomResource;
 class PostEndpointTest {
         @Test
         @Order(1)
-        @DisplayName("Listing all Posts")
-        void testPostList() {
+        @DisplayName("Listing all posts")
+        void testPostListTest() {
                 var response = given().when()
                                 .get("/post")
                                 .thenReturn();
@@ -39,8 +43,8 @@ class PostEndpointTest {
 
         @Test
         @Order(2)
-        @DisplayName("Listing Posts")
-        void listingPosts() {
+        @DisplayName("Listing Posts with pagination")
+        void listingPostsTest() {
                 range(0, 40)
                                 .forEachOrdered(index -> {
                                         given().contentType(ContentType.JSON)
@@ -123,7 +127,7 @@ class PostEndpointTest {
         @Test
         @Order(3)
         @DisplayName("Create Post")
-        void createPost() {
+        void createPostTest() {
                 var uuid = randomUUID().toString();
                 given().contentType(ContentType.JSON)
                                 .body(new CreatePostRequest("Test" + uuid))
@@ -146,7 +150,7 @@ class PostEndpointTest {
         @Test
         @Order(4)
         @DisplayName("Delete Post")
-        void deletePost() {
+        void deletePostTest() {
                 var uuid = randomUUID().toString();
                 var post = given().contentType(ContentType.JSON)
                                 .body(new CreatePostRequest("Test" + uuid))
@@ -166,6 +170,27 @@ class PostEndpointTest {
                 assertThat(body)
                                 .isNotEmpty()
                                 .doesNotContain(post);
+
+        }
+
+        @Test
+        @Order(5)
+        @DisplayName("Access Post")
+        void accessPostTest() {
+                var uuid = randomUUID().toString();
+                var post = given().contentType(ContentType.JSON)
+                                .body(new CreatePostRequest("Test" + uuid))
+                                .when()
+                                .post("/post")
+                                .then()
+                                .statusCode(201)
+                                .header("Location", matchesPattern(".*/post/[0-9]+"))
+                                .extract()
+                                .as(Post.class);
+                given().when().get("/post/{postId}", Map.of("postId", post.getId()))
+                                .then()
+                                .statusCode(200)
+                                .body("content", Matchers.is("Test" + uuid));
 
         }
 }

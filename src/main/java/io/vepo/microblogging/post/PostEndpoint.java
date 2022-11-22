@@ -26,6 +26,7 @@ public class PostEndpoint {
     Posts posts;
 
     @GET
+    @Path("/")
     @Produces(MediaType.APPLICATION_JSON)
     public List<Post> allPosts() {
         return posts.list();
@@ -52,5 +53,12 @@ public class PostEndpoint {
     @Produces(MediaType.APPLICATION_JSON)
     public Post deletePost(@PathParam("postId") Long postId) {
         return posts.delete(postId);
+    }
+
+    @GET
+    @Path("{postId}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Post getPost(@PathParam("postId") Long postId) {
+        return posts.find(postId);
     }
 }

@@ -48,4 +48,8 @@ public class Posts {
         }
         return post;
     }
+
+    public Post find(Long postId) {
+        return em.find(Post.class, postId);
+    }
 }
