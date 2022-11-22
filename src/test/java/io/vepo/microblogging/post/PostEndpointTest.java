@@ -38,7 +38,7 @@ class PostEndpointTest {
                                 .thenReturn();
                 assertEquals(response.statusCode(), 200);
                 var body = response.jsonPath();
-                assertEquals(body.getList(".", Post.class), emptyList());
+                assertThat(body.getList(".", Post.class)).isEmpty();
         }
 
         @Test
