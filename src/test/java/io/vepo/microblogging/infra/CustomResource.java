@@ -44,7 +44,8 @@ public class CustomResource implements QuarkusTestResourceLifecycleManager, DevS
         return Map.of(
                 "quarkus.datasource.username", container.getUsername(),
                 "quarkus.datasource.password", container.getPassword(),
-                "quarkus.datasource.jdbc.url", jdbcUrl);
+                "quarkus.datasource.jdbc.url", jdbcUrl,
+                "quarkus.hibernate-orm.database.generation", "drop-and-create");
     }
 
     private String fixJdbcUrl(String jdbcUrl) {
@@ -62,5 +63,6 @@ public class CustomResource implements QuarkusTestResourceLifecycleManager, DevS
     @Override
     public void stop() {
         // close container
+        container.stop();
     }
 }
