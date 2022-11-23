@@ -8,10 +8,12 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 
 @Entity
 @Table(name = "tb_users")
+@NamedQuery(name = "user-login", query = "FROM User where handle = :handle and hashedPassword = :hashedPassword")
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
