@@ -22,4 +22,9 @@ export class PostService {
   getPost(postId: number): Observable<Post> {
     return this.http.get<Post>(`/api/post/${postId}`);
   }
+
+
+  delete(post: Post): Observable<Post> {
+    return this.http.delete<Post>(`/api/post/${post.id}`);
+  }
 }

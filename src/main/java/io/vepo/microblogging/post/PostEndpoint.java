@@ -10,6 +10,7 @@ import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.DefaultValue;
 import javax.ws.rs.GET;
+import javax.ws.rs.NotFoundException;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
@@ -52,7 +53,8 @@ public class PostEndpoint {
     @Path("{postId}")
     @Produces(MediaType.APPLICATION_JSON)
     public Post deletePost(@PathParam("postId") Long postId) {
-        return posts.delete(postId);
+        return posts.delete(postId)
+                .orElseThrow(() -> new NotFoundException(String.format("Could not find Post! postId=%d", postId)));
     }
 
     @GET
