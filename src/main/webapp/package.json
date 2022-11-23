@@ -6,7 +6,9 @@
     "start": "ng serve",
     "build": "ng build --output-path ../resources/META-INF/resources/",
     "watch": "ng build --watch --configuration development --output-path ../resources/META-INF/resources/",
-    "test": "ng test"
+    "test": "ng test",
+    "lint": "ng lint",
+    "sonar": "sonar-scanner"
   },
   "private": true,
   "dependencies": {
@@ -24,15 +26,28 @@
   },
   "devDependencies": {
     "@angular-devkit/build-angular": "^15.0.0",
+    "@angular-eslint/builder": "15.0.0",
+    "@angular-eslint/eslint-plugin": "15.0.0",
+    "@angular-eslint/eslint-plugin-template": "15.0.0",
+    "@angular-eslint/schematics": "15.0.0",
+    "@angular-eslint/template-parser": "15.0.0",
     "@angular/cli": "~15.0.0",
     "@angular/compiler-cli": "^15.0.0",
     "@types/jasmine": "~4.3.0",
+    "@typescript-eslint/eslint-plugin": "5.43.0",
+    "@typescript-eslint/parser": "5.43.0",
+    "eslint": "^8.28.0",
+    "eslint-config-standard-with-typescript": "^23.0.0",
+    "eslint-plugin-import": "^2.26.0",
+    "eslint-plugin-n": "^15.5.1",
+    "eslint-plugin-promise": "^6.1.1",
+    "eslint-plugin-sonarjs": "^0.16.0",
     "jasmine-core": "~4.5.0",
     "karma": "~6.4.0",
     "karma-chrome-launcher": "~3.1.0",
     "karma-coverage": "~2.2.0",
     "karma-jasmine": "~5.1.0",
     "karma-jasmine-html-reporter": "~2.0.0",
-    "typescript": "~4.8.2"
+    "typescript": "^4.8.4"
   }
 }
