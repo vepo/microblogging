@@ -6,7 +6,7 @@
     <artifactId>microblogging</artifactId>
     <version>0.0.1-SNAPSHOT</version>
 
-    <name>DataMotion</name>
+    <name>MicroBlogging</name>
     <url>https://blog.vepo.dev</url>
 
     <packaging>jar</packaging>
