@@ -1,5 +1,6 @@
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { FormsModule } from '@angular/forms';
 import { RouterTestingModule } from '@angular/router/testing';
 import { MbEditorComponent } from '../mb-editor/mb-editor.component';
 import { MbTimelineComponent } from '../mb-timeline/mb-timeline.component';
@@ -13,7 +14,7 @@ describe('HomeScreenComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [ HomeScreenComponent, MbEditorComponent, MbTimelineComponent ],
-      imports: [RouterTestingModule, HttpClientTestingModule]
+      imports: [RouterTestingModule, HttpClientTestingModule, FormsModule]
     })
     .compileComponents();
 
