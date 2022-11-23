@@ -1,4 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { MbEditorComponent } from '../mb-editor/mb-editor.component';
+import { MbTimelineComponent } from '../mb-timeline/mb-timeline.component';
 
 import { HomeScreenComponent } from './home-screen.component';
 
@@ -8,7 +10,7 @@ describe('HomeScreenComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ HomeScreenComponent ]
+      declarations: [ HomeScreenComponent, MbEditorComponent, MbTimelineComponent ]
     })
     .compileComponents();
 
