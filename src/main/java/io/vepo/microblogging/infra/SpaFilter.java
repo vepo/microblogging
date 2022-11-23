@@ -16,6 +16,7 @@ import javax.servlet.http.HttpServletResponse;
 public class SpaFilter extends HttpFilter {
     private static final Pattern FILE_NAME_PATTERN = Pattern.compile(".*[.][a-zA-Z\\d]+");
 
+    @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain chain)
             throws IOException, ServletException {
         HttpServletRequest request = (HttpServletRequest) servletRequest;
