@@ -1,0 +1,9 @@
+<div class="post">
+    <button class="btn-delete" (click)="delete()">X</button>
+    <div class="content">
+        {{post.content}}
+    </div>
+    <div class="date">
+        {{ post.createdAt | date:'short' }}
+    </div>
+</div>

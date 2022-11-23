@@ -2,6 +2,7 @@ package io.vepo.microblogging.post;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.persistence.EntityManager;
@@ -39,14 +40,14 @@ public class Posts {
         return em.merge(post);
     }
 
-    public Post delete(Long postId) {
+    public Optional<Post> delete(Long postId) {
         var post = em.find(Post.class, postId);
         if (Objects.nonNull(post)) {
             em.createNamedQuery("post-delete")
                     .setParameter("id", postId)
                     .executeUpdate();
         }
-        return post;
+        return Optional.ofNullable(post);
     }
 
     public Post find(Long postId) {

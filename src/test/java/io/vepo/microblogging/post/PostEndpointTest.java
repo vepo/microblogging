@@ -1,7 +1,6 @@
 package io.vepo.microblogging.post;
 
 import static io.restassured.RestAssured.given;
-import static java.util.Collections.emptyList;
 import static java.util.UUID.randomUUID;
 import static java.util.stream.IntStream.range;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -9,9 +8,10 @@ import static org.assertj.core.condition.VerboseCondition.verboseCondition;
 import static org.hamcrest.Matchers.matchesPattern;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.Map;
 
-import org.hamcrest.Matcher;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
@@ -20,6 +20,8 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 
 import io.quarkus.test.common.QuarkusTestResource;
+import io.quarkus.test.common.http.TestHTTPEndpoint;
+import io.quarkus.test.common.http.TestHTTPResource;
 import io.quarkus.test.junit.QuarkusTest;
 import io.restassured.common.mapper.TypeRef;
 import io.restassured.http.ContentType;
@@ -29,12 +31,17 @@ import io.vepo.microblogging.infra.CustomResource;
 @QuarkusTestResource(value = CustomResource.class)
 @TestMethodOrder(OrderAnnotation.class)
 class PostEndpointTest {
+
+        @TestHTTPEndpoint(PostEndpoint.class)
+        @TestHTTPResource
+        URL url;
+
         @Test
         @Order(1)
         @DisplayName("Listing all posts")
         void testPostListTest() {
                 var response = given().when()
-                                .get("/post")
+                                .get(url)
                                 .thenReturn();
                 assertEquals(response.statusCode(), 200);
                 var body = response.jsonPath();
@@ -44,20 +51,20 @@ class PostEndpointTest {
         @Test
         @Order(2)
         @DisplayName("Listing Posts with pagination")
-        void listingPostsTest() {
+        void listingPostsTest() throws MalformedURLException {
                 range(0, 40)
                                 .forEachOrdered(index -> {
                                         given().contentType(ContentType.JSON)
                                                         .body(new CreatePostRequest("POST-" + index))
                                                         .when()
-                                                        .post("/post")
+                                                        .post(url)
                                                         .then()
                                                         .statusCode(201)
                                                         .header("Location", matchesPattern(".*/post/[0-9]+"));
                                 });
                 var firstPage = given().queryParam("page", 0)
                                 .queryParam("pageSize", 15)
-                                .get("/post/stream")
+                                .get(url.toExternalForm() + "/stream")
                                 .thenReturn();
                 assertThat(firstPage).has(verboseCondition(response -> response.statusCode() == 200,
                                 "Status code should be 200", r -> String.format(", but was %d", r.statusCode())))
@@ -74,7 +81,7 @@ class PostEndpointTest {
                                                 .mapToObj(index -> "POST-" + index).toList());
                 var secondPage = given().queryParam("page", 1)
                                 .queryParam("pageSize", 15)
-                                .get("/post/stream")
+                                .get(url.toExternalForm() + "/stream")
                                 .thenReturn();
                 assertThat(secondPage).has(verboseCondition(response -> response.statusCode() == 200,
                                 "Status code should be 200", r -> String.format(", but was %d", r.statusCode())))
@@ -93,7 +100,7 @@ class PostEndpointTest {
 
                 var thirdPage = given().queryParam("page", 2)
                                 .queryParam("pageSize", 15)
-                                .get("/post/stream")
+                                .get(url.toExternalForm() + "/stream")
                                 .thenReturn();
                 assertThat(thirdPage).has(verboseCondition(response -> response.statusCode() == 200,
                                 "Status code should be 200", r -> String.format(", but was %d", r.statusCode())))
@@ -112,7 +119,7 @@ class PostEndpointTest {
 
                 var lastPage = given().queryParam("page", 3)
                                 .queryParam("pageSize", 15)
-                                .get("/post/stream")
+                                .get(url.toExternalForm() + "/stream")
                                 .thenReturn();
                 assertThat(lastPage).has(verboseCondition(response -> response.statusCode() == 200,
                                 "Status code should be 200", r -> String.format(", but was %d", r.statusCode())))
@@ -132,12 +139,12 @@ class PostEndpointTest {
                 given().contentType(ContentType.JSON)
                                 .body(new CreatePostRequest("Test" + uuid))
                                 .when()
-                                .post("/post")
+                                .post(url)
                                 .then()
                                 .statusCode(201)
                                 .header("Location", matchesPattern(".*/post/[0-9]+"));
                 var response = given().when()
-                                .get("/post")
+                                .get(url)
                                 .thenReturn();
                 assertEquals(response.statusCode(), 200);
                 var body = response.jsonPath()
@@ -155,15 +162,15 @@ class PostEndpointTest {
                 var post = given().contentType(ContentType.JSON)
                                 .body(new CreatePostRequest("Test" + uuid))
                                 .when()
-                                .post("/post")
+                                .post(url)
                                 .then()
                                 .statusCode(201)
                                 .header("Location", matchesPattern(".*/post/[0-9]+")).extract().as(Post.class);
                 given().when()
-                                .delete("/post/" + post.getId())
+                                .delete(url.toExternalForm() + "/{postId}", Map.of("postId", post.getId()))
                                 .then().statusCode(200);
                 var response = given().when()
-                                .get("/post")
+                                .get(url)
                                 .thenReturn();
                 var body = response.jsonPath()
                                 .getList(".", Post.class);
@@ -181,13 +188,13 @@ class PostEndpointTest {
                 var post = given().contentType(ContentType.JSON)
                                 .body(new CreatePostRequest("Test" + uuid))
                                 .when()
-                                .post("/post")
+                                .post(url)
                                 .then()
                                 .statusCode(201)
                                 .header("Location", matchesPattern(".*/post/[0-9]+"))
                                 .extract()
                                 .as(Post.class);
-                given().when().get("/post/{postId}", Map.of("postId", post.getId()))
+                given().when().get(url.toExternalForm() + "/{postId}", Map.of("postId", post.getId()))
                                 .then()
                                 .statusCode(200)
                                 .body("content", Matchers.is("Test" + uuid));

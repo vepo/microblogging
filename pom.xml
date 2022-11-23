@@ -6,7 +6,7 @@
     <artifactId>microblogging</artifactId>
     <version>0.0.1-SNAPSHOT</version>
 
-    <name>DataMotion</name>
+    <name>MicroBlogging</name>
     <url>https://blog.vepo.dev</url>
 
     <packaging>jar</packaging>
@@ -45,6 +45,10 @@
     </dependencyManagement>
 
     <dependencies>
+        <dependency>
+            <groupId>io.quarkus</groupId>
+            <artifactId>quarkus-undertow</artifactId>
+        </dependency>
         <dependency>
             <groupId>io.quarkus</groupId>
             <artifactId>quarkus-resteasy-reactive-jackson</artifactId>
@@ -86,7 +90,51 @@
             <scope>test</scope>
         </dependency>
     </dependencies>
-
+    <profiles>
+        <profile>
+            <id>build-webapp</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.codehaus.mojo</groupId>
+                        <artifactId>exec-maven-plugin</artifactId>
+                        <version>3.1.0</version>
+                        <executions>
+                            <execution>
+                                <id>npm-install</id>
+                                <phase>generate-resources</phase>
+                                <goals>
+                                    <goal>exec</goal>
+                                </goals>
+                                <configuration>
+                                    <workingDirectory>src/main/webapp</workingDirectory>
+                                    <executable>npm</executable>
+                                    <arguments>
+                                        <argument>install</argument>
+                                    </arguments>
+                                </configuration>
+                            </execution>
+                            <execution>
+                                <id>npm-build</id>
+                                <phase>generate-resources</phase>
+                                <goals>
+                                    <goal>exec</goal>
+                                </goals>
+                                <configuration>
+                                    <workingDirectory>src/main/webapp</workingDirectory>
+                                    <executable>npm</executable>
+                                    <arguments>
+                                        <argument>run</argument>
+                                        <argument>build</argument>
+                                    </arguments>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
     <build>
         <plugins>
             <plugin>
@@ -137,7 +185,6 @@
                     <systemProperties>
                         <maven.version>${maven.version}</maven.version>
                         <maven.home>${maven.home}</maven.home>
-                        <!--ITF_DEBUG>true</ITF_DEBUG-->
                     </systemProperties>
                 </configuration>
                 <executions>
