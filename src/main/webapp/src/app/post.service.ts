@@ -15,8 +15,14 @@ export class PostService {
     return this.http.post<Post>("/api/post", request);
   }
 
-  getPosts(): Observable<Pagging<Post>> {
-    return this.http.get<Pagging<Post>>("/api/post/stream");
+  getPosts(offset: number = 0): Observable<Pagging<Post>> {
+    console.log("Loading page", `page: ${Math.ceil(offset / 15)}`, `offset: ${offset}`);
+    return this.http.get<Pagging<Post>>("/api/post/stream", {
+      params: {
+        pageSize: 15,
+        page: Math.ceil(offset / 15)
+      }
+    });
   }
 
   getPost(postId: number): Observable<Post> {

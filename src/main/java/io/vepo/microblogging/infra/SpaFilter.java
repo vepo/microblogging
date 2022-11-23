@@ -29,7 +29,7 @@ public class SpaFilter extends HttpFilter {
         }
 
         // If the server didn't find the resource
-        if (response.getStatus() == 404) {
+        if (response.getStatus() == 404 || response.getStatus() == 403) {
             // Is it a file (eg. image, font, etc.)
             String path = request.getRequestURI().substring(request.getContextPath().length()).replaceAll("[/]+$", "");
             if (!FILE_NAME_PATTERN.matcher(path).matches()) {

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, HostListener, OnInit } from '@angular/core';
 import { PostService } from '../post.service';
 import { Post } from '../posts/posts.model';
 
@@ -9,9 +9,36 @@ import { Post } from '../posts/posts.model';
 })
 export class MbTimelineComponent implements OnInit {
   posts: Post[] = [];
+  hasMore: boolean = true;
+  loadingItems: boolean = false;
   constructor(private postService: PostService) { }
   ngOnInit(): void {
-    this.postService.getPosts()
-      .subscribe(page => this.posts.push(...page.items));
+    if (!this.loadingItems) {
+      this.loadingItems = true;
+      this.postService.getPosts()
+        .subscribe(page => {
+          this.posts.push(...page.items);
+          this.hasMore = page.items.length > 0;
+          this.loadingItems = false;
+        });
+    }
+  }
+
+  @HostListener('window:scroll', ['$event'])
+  onScroll(event: Event) {
+    if (this.hasMore && !this.loadingItems && event.target instanceof Document) {
+      var scrollTop = typeof event.target.scrollingElement?.scrollTop == 'number' ? event.target.scrollingElement.scrollTop : 0;
+      var clientHeight = typeof event.target.scrollingElement?.clientHeight == 'number' ? event.target.scrollingElement.clientHeight : 0;
+      var scrollHeight = typeof event.target.scrollingElement?.scrollHeight == 'number' ? event.target.scrollingElement.scrollHeight : 0;
+      if (scrollTop + clientHeight > 0.85 * scrollHeight) {
+        this.loadingItems = true;
+        this.postService.getPosts(this.posts.length)
+          .subscribe(page => {
+            this.posts.push(...page.items);
+            this.hasMore = page.items.length > 0;
+            this.loadingItems = false;
+          });
+      }
+    }
   }
 }
