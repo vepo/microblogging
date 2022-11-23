@@ -1,4 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { RouterTestingModule } from "@angular/router/testing";
+import { HttpClientTestingModule } from "@angular/common/http/testing";
 
 import { MbViewerComponent } from './mb-viewer.component';
 
@@ -8,7 +10,8 @@ describe('MbViewerComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ MbViewerComponent ]
+      declarations: [ MbViewerComponent ],
+      imports: [RouterTestingModule, HttpClientTestingModule],
     })
     .compileComponents();
 

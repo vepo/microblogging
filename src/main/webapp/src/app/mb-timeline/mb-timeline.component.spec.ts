@@ -1,3 +1,4 @@
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { MbTimelineComponent } from './mb-timeline.component';
@@ -8,7 +9,8 @@ describe('MbTimelineComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ MbTimelineComponent ]
+      declarations: [ MbTimelineComponent ],
+      imports: [HttpClientTestingModule],
     })
     .compileComponents();
 
