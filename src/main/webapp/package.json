@@ -7,6 +7,7 @@
     "build": "ng build --output-path ../resources/META-INF/resources/",
     "watch": "ng build --watch --configuration development --output-path ../resources/META-INF/resources/",
     "test": "ng test",
+    "coverage": "ng test --no-watch --code-coverage",
     "lint": "ng lint",
     "sonar": "sonar-scanner"
   },
