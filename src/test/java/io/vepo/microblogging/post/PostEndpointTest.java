@@ -28,6 +28,7 @@ import io.restassured.http.ContentType;
 import io.vepo.microblogging.infra.CustomResource;
 
 @QuarkusTest
+@DisplayName("Post Endpoint")
 @QuarkusTestResource(value = CustomResource.class)
 @TestMethodOrder(OrderAnnotation.class)
 class PostEndpointTest {
