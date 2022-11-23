@@ -43,7 +43,7 @@ class PostEndpointTest {
                 var response = given().when()
                                 .get(url)
                                 .thenReturn();
-                assertEquals(response.statusCode(), 200);
+                assertEquals(200, response.statusCode());
                 var body = response.jsonPath();
                 assertThat(body.getList(".", Post.class)).isEmpty();
         }
@@ -146,7 +146,7 @@ class PostEndpointTest {
                 var response = given().when()
                                 .get(url)
                                 .thenReturn();
-                assertEquals(response.statusCode(), 200);
+                assertEquals(200, response.statusCode());
                 var body = response.jsonPath()
                                 .getList(".", Post.class);
                 assertThat(body).hasSizeGreaterThan(1)

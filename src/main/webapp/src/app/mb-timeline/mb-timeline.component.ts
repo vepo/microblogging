@@ -27,9 +27,9 @@ export class MbTimelineComponent implements OnInit {
   @HostListener('window:scroll', ['$event'])
   onScroll(event: Event) {
     if (this.hasMore && !this.loadingItems && event.target instanceof Document) {
-      var scrollTop = typeof event.target.scrollingElement?.scrollTop == 'number' ? event.target.scrollingElement.scrollTop : 0;
-      var clientHeight = typeof event.target.scrollingElement?.clientHeight == 'number' ? event.target.scrollingElement.clientHeight : 0;
-      var scrollHeight = typeof event.target.scrollingElement?.scrollHeight == 'number' ? event.target.scrollingElement.scrollHeight : 0;
+      let scrollTop = typeof event.target.scrollingElement?.scrollTop == 'number' ? event.target.scrollingElement.scrollTop : 0;
+      let clientHeight = typeof event.target.scrollingElement?.clientHeight == 'number' ? event.target.scrollingElement.clientHeight : 0;
+      let scrollHeight = typeof event.target.scrollingElement?.scrollHeight == 'number' ? event.target.scrollingElement.scrollHeight : 0;
       if (scrollTop + clientHeight > 0.85 * scrollHeight) {
         this.loadingItems = true;
         this.postService.getPosts(this.posts.length)
