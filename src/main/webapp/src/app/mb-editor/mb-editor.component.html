@@ -1,0 +1,15 @@
+<div class="editor-root">
+    <div>
+        <div>
+            <textarea class="editor" [(ngModel)]="content"></textarea>
+        </div>
+    </div>
+    <div class="content-length">
+        {{content.length }}
+    </div>
+    <div>
+        <div class="btns">
+            <button class="btn-create" (click)="create()">Post</button>
+        </div>
+    </div>
+</div>
