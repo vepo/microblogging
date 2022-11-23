@@ -6,7 +6,7 @@ import { PostService } from './post.service';
 describe('PostService', () => {
   let service: PostService;
 
-  beforeEach(() => {
+  beforeEach(async () => {
     await TestBed.configureTestingModule({ imports: [HttpClientTestingModule] }).compileComponents();
     service = TestBed.inject(PostService);
   });
