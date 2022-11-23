@@ -41,10 +41,10 @@ jobs:
         restore-keys: ${{ runner.os }}-node_modules
     - name: "Install Angular dependencies"
       run: npm install
-      working-directory: src/main/webapp/node_modules
+      working-directory: src/main/webapp
     - name: "[Angular] Build and analyze"
       run: npm run coverage
-      working-directory: src/main/webapp/node_modules
+      working-directory: src/main/webapp
     - name: "[Java] Build and analyze"
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
