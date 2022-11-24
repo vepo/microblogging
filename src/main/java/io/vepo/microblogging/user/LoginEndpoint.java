@@ -1,5 +1,6 @@
 package io.vepo.microblogging.user;
 
+import javax.annotation.security.PermitAll;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.ws.rs.Consumes;
@@ -22,6 +23,7 @@ public class LoginEndpoint {
     JwtUtils jwtUtils;
 
     @POST
+    @PermitAll
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.TEXT_PLAIN)
     public Response login(Credentials credentials) {

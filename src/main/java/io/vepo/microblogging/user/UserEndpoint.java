@@ -3,6 +3,7 @@ package io.vepo.microblogging.user;
 import java.net.URI;
 import java.net.URISyntaxException;
 
+import javax.annotation.security.PermitAll;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.ws.rs.Consumes;
@@ -24,6 +25,7 @@ public class UserEndpoint {
     Users users;
 
     @POST
+    @PermitAll
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response create(CreateUserRequest request) throws URISyntaxException {
