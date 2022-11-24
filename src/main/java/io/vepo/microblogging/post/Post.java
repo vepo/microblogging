@@ -1,6 +1,8 @@
 package io.vepo.microblogging.post;
 
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoField;
+import java.time.temporal.ChronoUnit;
 import java.util.Objects;
 
 import javax.persistence.Column;
@@ -22,21 +24,25 @@ public class Post {
     @Column
     private String content;
 
+    @Column(name="author_id", nullable = false)
+    private Long authorId;
+
     @Column(name = "created_at")
     private LocalDateTime createdAt;
 
     public Post() {
-        this(null, null);
+        this(null, null, null);
     }
 
-    public Post(String content) {
-        this(null, content);
+    public Post(Long authorId, String content) {
+        this(null, authorId, content);
     }
 
-    public Post(Long id, String content) {
+    public Post(Long id, Long authorId, String content) {
         this.id = id;
+        this.authorId = authorId;
         this.content = content;
-        this.createdAt = LocalDateTime.now();
+        this.createdAt = LocalDateTime.now().truncatedTo(ChronoUnit.MILLIS);
     }
 
     public Long getId() {
@@ -45,6 +51,14 @@ public class Post {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public Long getAuthorId() {
+        return authorId;
+    }
+
+    public void setAuthorId(Long authorId) {
+        this.authorId = authorId;
     }
 
     public String getContent() {
@@ -65,7 +79,7 @@ public class Post {
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, content, createdAt);
+        return Objects.hash(id);
     }
 
     @Override
@@ -78,13 +92,11 @@ public class Post {
             return false;
         }
         Post other = (Post) obj;
-        return Objects.equals(id, other.id)
-                && Objects.equals(content, other.content)
-                && Objects.equals(createdAt, other.createdAt);
+        return Objects.equals(id, other.id);
     }
 
     @Override
     public String toString() {
-        return String.format("Post[id=%d, content=%s, createdAt=%s]", id, content, createdAt);
+        return String.format("Post[id=%d, authorId=%d, content=%s, createdAt=%s]", id, authorId, content, createdAt);
     }
 }

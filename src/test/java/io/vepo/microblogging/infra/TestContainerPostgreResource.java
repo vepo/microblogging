@@ -2,16 +2,26 @@ package io.vepo.microblogging.infra;
 
 import java.util.Map;
 import java.util.Optional;
+import java.util.concurrent.atomic.AtomicReference;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.testcontainers.containers.JdbcDatabaseContainer;
 import org.testcontainers.containers.PostgreSQLContainer;
 
 import io.quarkus.test.common.DevServicesContext;
 import io.quarkus.test.common.QuarkusTestResourceLifecycleManager;
 
-public class CustomResource implements QuarkusTestResourceLifecycleManager, DevServicesContext.ContextAware {
+public class TestContainerPostgreResource
+        implements QuarkusTestResourceLifecycleManager, DevServicesContext.ContextAware {
+    private final static Logger logger = LoggerFactory.getLogger(TestContainerPostgreResource.class);
     private Optional<String> containerNetworkId;
     private JdbcDatabaseContainer container;
+
+    public static record DatabaseInfo(String url, String username, String password) {
+    }
+
+    static AtomicReference<Optional<DatabaseInfo>> ACTIVE_DATABASE = new AtomicReference<>(Optional.empty());
 
     @Override
     public void setIntegrationTestContext(DevServicesContext context) {
@@ -20,6 +30,7 @@ public class CustomResource implements QuarkusTestResourceLifecycleManager, DevS
 
     @Override
     public Map<String, String> start() {
+        logger.info("Initializing database container (Postgres)....");
         // start a container making sure to call withNetworkMode() with the value of
         // containerNetworkId if present
         container = new PostgreSQLContainer<>("postgres:latest").withLogConsumer(outputFrame -> {
@@ -38,6 +49,10 @@ public class CustomResource implements QuarkusTestResourceLifecycleManager, DevS
             // running PostgreSQL and the listening port.
             jdbcUrl = fixJdbcUrl(jdbcUrl);
         }
+
+        logger.info("Database ({}) initialized!", container.getImage());
+
+        ACTIVE_DATABASE.set(Optional.of(new DatabaseInfo(jdbcUrl, container.getUsername(), container.getPassword())));
 
         // return a map containing the configuration the application needs to use the
         // service
@@ -62,7 +77,10 @@ public class CustomResource implements QuarkusTestResourceLifecycleManager, DevS
 
     @Override
     public void stop() {
+        logger.info("Stopping database(Postgress)...");
+        ACTIVE_DATABASE.set(Optional.empty());
         // close container
         container.stop();
+        logger.info("Database stopped!");
     }
 }

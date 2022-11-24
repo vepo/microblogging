@@ -31,9 +31,23 @@ public class Posts {
         var root = query.from(Post.class);
         query.orderBy(criteriaBuilder.asc(root.get("createdAt")));
         return em.createQuery(query)
-                .setFirstResult(offset)
-                .setMaxResults(limit)
-                .getResultList();
+                 .setFirstResult(offset)
+                 .setMaxResults(limit)
+                 .getResultList();
+    }
+
+    public List<Post> listByAuthorId(Long authorId, int offset, int limit) {
+        var post = em.find(Post.class, 1L);
+        System.out.println(post);
+        CriteriaBuilder criteriaBuilder = em.getCriteriaBuilder();
+        CriteriaQuery<Post> query = criteriaBuilder.createQuery(Post.class);
+        var root = query.from(Post.class);
+        query.where(criteriaBuilder.equal(root.get("authorId"), authorId))
+             .orderBy(criteriaBuilder.asc(root.get("createdAt")));
+        return em.createQuery(query)
+                 .setFirstResult(offset)
+                 .setMaxResults(limit)
+                 .getResultList();
     }
 
     public Post createPost(Post post) {
@@ -44,8 +58,8 @@ public class Posts {
         var post = em.find(Post.class, postId);
         if (Objects.nonNull(post)) {
             em.createNamedQuery("post-delete")
-                    .setParameter("id", postId)
-                    .executeUpdate();
+              .setParameter("id", postId)
+              .executeUpdate();
         }
         return Optional.ofNullable(post);
     }
