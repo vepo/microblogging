@@ -1,10 +1,13 @@
-package io.vepo.microblogging.infra;
+package io.vepo.microblogging.user;
 
 import static io.restassured.RestAssured.given;
 
 import java.net.URL;
 
 import javax.ws.rs.core.HttpHeaders;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import io.restassured.http.ContentType;
 import io.restassured.http.Header;
@@ -13,7 +16,9 @@ import io.restassured.response.ValidatableResponse;
 import io.vepo.microblogging.user.CreateUserRequest;
 import io.vepo.microblogging.user.Credentials;
 
-public class UserHelper {
+public class UserActions {
+
+    private static final Logger logger = LoggerFactory.getLogger(UserActions.class);
 
     public interface Authenticator {
         AuthenticatedUserResponse authenticate();
@@ -28,12 +33,16 @@ public class UserHelper {
             this.loginUrl = loginUrl;
         }
 
+        public UserCreated create(final UserInfo user) {
+            logger.info("Trying to create user... info={}", user);
+            return new UserCreated(loginUrl, user, given().contentType(ContentType.JSON)
+                    .body(new CreateUserRequest(user.handle(), user.email(), user.password()))
+                    .post(userUrl)
+                    .then());
+        }
+
         public UserCreated create(final String handle, final String email, final String password) {
-            return new UserCreated(loginUrl, new UserInfo(handle, email, password),
-                    given().contentType(ContentType.JSON)
-                            .body(new CreateUserRequest(handle, email, password))
-                            .post(userUrl)
-                            .then());
+            return create(new UserInfo(handle, email, password));
         }
 
         public UserCreated create() {
@@ -52,6 +61,7 @@ public class UserHelper {
 
         @Override
         public AuthenticatedUserResponse authenticate() {
+            logger.info("Trying to authenticate user... info={}", userInfo);
             return new AuthenticatedUserResponse(given().contentType(ContentType.JSON)
                     .body(new Credentials(userInfo.handle(), userInfo.password()))
                     .post(loginUrl)
@@ -78,6 +88,7 @@ public class UserHelper {
 
         @Override
         public AuthenticatedUserResponse authenticate() {
+            logger.info("Trying to authenticate user... info={}", userInfo);
             return new AuthenticatedUserResponse(given().contentType(ContentType.JSON)
                     .body(new Credentials(userInfo.handle(), userInfo.password()))
                     .post(loginUrl)
@@ -120,6 +131,10 @@ public class UserHelper {
         public AuthenticatedUserResponse unauthorized() {
             this.httpResponse.statusCode(401);
             return this;
+        }
+
+        public Response response() {
+            return this.httpResponse.extract().response();
         }
 
     }

@@ -1,10 +1,10 @@
 package io.vepo.microblogging.infra;
 
+import static io.vepo.microblogging.infra.TestContainerPostgreResource.ACTIVE_DATABASE;
+
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
-import org.junit.jupiter.api.extension.AfterEachCallback;
-import org.junit.jupiter.api.extension.ExtensionContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -16,28 +16,27 @@ public class CleanupDatabaseExtension implements QuarkusTestAfterTestExecutionCa
 
     @Override
     public void afterTestExecution(QuarkusTestMethodContext context) {
-        logger.info("Extension classloader {}", this.getClass().getClassLoader());
-        TestContainerPostgreResource.ACTIVE_DATABASE.get()
-                .ifPresent(info -> {
-                    try {
-                        logger.info("Cleaning database... context={}", context.getTestInstance());
-                        try (var conn = DriverManager.getConnection(info.url(), info.username(), info.password())) {
-                            var dbmd = conn.getMetaData();
-                            try (var tables = dbmd.getTables(null, null, "%", new String[] { "TABLE" })) {
-                                while (tables.next()) {
-                                    String tableName = tables.getString("TABLE_NAME");
-                                    logger.info("Cleaning table! table={}", tableName);
-                                    var rowsDeleted = conn.createStatement().executeUpdate("DELETE FROM " + tableName);
-                                    logger.info("Rows {} deleted from {}", rowsDeleted, tableName);
-                                }
-                            }
+        ACTIVE_DATABASE.get().ifPresent(info -> {
+            try {
+                logger.info("Cleaning database... {}::{}", context.getTestInstance().getClass().getName(),
+                        context.getTestMethod().getName());
+                try (var conn = DriverManager.getConnection(info.url(), info.username(), info.password())) {
+                    var dbmd = conn.getMetaData();
+                    try (var tables = dbmd.getTables(null, null, "%", new String[] { "TABLE" })) {
+                        while (tables.next()) {
+                            String tableName = tables.getString("TABLE_NAME");
+                            logger.info("Selecting table({})...", tableName);
+                            var rowsDeleted = conn.createStatement().executeUpdate("DELETE FROM " + tableName);
+                            logger.info("Rows {} deleted from {}", rowsDeleted, tableName);
                         }
-                        logger.info("Database clean!");
-                    } catch (SQLException sqle) {
-                        logger.error("Error cleaning database!", sqle);
-                        throw new RuntimeException(sqle);
                     }
-                });
+                }
+                logger.info("Database cleaned!");
+            } catch (SQLException sqle) {
+                logger.error("Error cleaning database!", sqle);
+                throw new TestSetupException("Fail to cleanup database!", sqle);
+            }
+        });
 
     }
 

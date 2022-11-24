@@ -1,6 +1,8 @@
 package io.vepo.microblogging.post;
 
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoField;
+import java.time.temporal.ChronoUnit;
 import java.util.Objects;
 
 import javax.persistence.Column;
@@ -36,7 +38,7 @@ public class Post {
     public Post(Long id, String content) {
         this.id = id;
         this.content = content;
-        this.createdAt = LocalDateTime.now();
+        this.createdAt = LocalDateTime.now().truncatedTo(ChronoUnit.MILLIS);
     }
 
     public Long getId() {

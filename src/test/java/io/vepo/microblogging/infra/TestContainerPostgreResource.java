@@ -9,8 +9,6 @@ import org.slf4j.LoggerFactory;
 import org.testcontainers.containers.JdbcDatabaseContainer;
 import org.testcontainers.containers.PostgreSQLContainer;
 
-import com.github.dockerjava.zerodep.shaded.org.apache.hc.client5.http.auth.KerberosConfig.Option;
-
 import io.quarkus.test.common.DevServicesContext;
 import io.quarkus.test.common.QuarkusTestResourceLifecycleManager;
 
@@ -32,7 +30,7 @@ public class TestContainerPostgreResource
 
     @Override
     public Map<String, String> start() {
-        logger.info("Initializing Postgres.... classLoader={}", this.getClass().getClassLoader());
+        logger.info("Initializing database container (Postgres)....");
         // start a container making sure to call withNetworkMode() with the value of
         // containerNetworkId if present
         container = new PostgreSQLContainer<>("postgres:latest").withLogConsumer(outputFrame -> {
@@ -52,7 +50,7 @@ public class TestContainerPostgreResource
             jdbcUrl = fixJdbcUrl(jdbcUrl);
         }
 
-        logger.info("Postgres initialized!");
+        logger.info("Database ({}) initialized!", container.getImage());
 
         ACTIVE_DATABASE.set(Optional.of(new DatabaseInfo(jdbcUrl, container.getUsername(), container.getPassword())));
 
@@ -79,10 +77,10 @@ public class TestContainerPostgreResource
 
     @Override
     public void stop() {
-        logger.info("Stopping Postgress...");
+        logger.info("Stopping database(Postgress)...");
         ACTIVE_DATABASE.set(Optional.empty());
         // close container
         container.stop();
-        logger.info("Postgres stopped!");
+        logger.info("Database stopped!");
     }
 }
