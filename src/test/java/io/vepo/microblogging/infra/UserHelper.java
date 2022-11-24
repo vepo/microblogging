@@ -6,11 +6,9 @@ import java.net.URL;
 
 import javax.ws.rs.core.HttpHeaders;
 
-import org.testcontainers.shaded.org.yaml.snakeyaml.emitter.Emitable;
-
-import groovyjarjarantlr4.v4.automata.ATNFactory.Handle;
 import io.restassured.http.ContentType;
 import io.restassured.http.Header;
+import io.restassured.response.Response;
 import io.restassured.response.ValidatableResponse;
 import io.vepo.microblogging.user.CreateUserRequest;
 import io.vepo.microblogging.user.Credentials;
@@ -84,6 +82,16 @@ public class UserHelper {
                     .body(new Credentials(userInfo.handle(), userInfo.password()))
                     .post(loginUrl)
                     .then());
+        }
+
+        public UserCreated conflict() {
+            this.httpResponse.statusCode(409);
+            return this;
+        }
+
+        public Response response() {
+            return httpResponse.extract()
+                    .response();
         }
     }
 

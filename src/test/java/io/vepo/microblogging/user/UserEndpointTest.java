@@ -1,7 +1,7 @@
 package io.vepo.microblogging.user;
 
-import static io.restassured.RestAssured.given;
 import static io.vepo.microblogging.infra.UserHelper.givenAuthenticator;
+import static io.vepo.microblogging.infra.UserHelper.givenUserCreator;
 import static io.vepo.microblogging.infra.UserHelper.withUserInfo;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -18,7 +18,6 @@ import io.quarkus.test.common.QuarkusTestResource;
 import io.quarkus.test.common.http.TestHTTPEndpoint;
 import io.quarkus.test.common.http.TestHTTPResource;
 import io.quarkus.test.junit.QuarkusTest;
-import io.restassured.http.ContentType;
 import io.vepo.microblogging.infra.TestContainerPostgreResource;
 
 @QuarkusTest
@@ -41,10 +40,10 @@ class UserEndpointTest {
                 givenAuthenticator(loginUrl).authenticate()
                                 .unauthorized();
                 var start = LocalDateTime.now();
-                var createUserResponse = given().contentType(ContentType.JSON)
-                                .body(new CreateUserRequest("user-1", "user-1@microblogging.com", "123456"))
-                                .post(userUrl)
-                                .andReturn();
+                var createUserResponse = givenUserCreator(userUrl, loginUrl)
+                                .create("user-1", "user-1@microblogging.com", "123456")
+                                .response();
+
                 assertEquals(201, createUserResponse.statusCode());
                 User createdUser = createUserResponse.as(User.class);
                 assertEquals("user-1", createdUser.getHandle());
@@ -54,5 +53,16 @@ class UserEndpointTest {
                 givenAuthenticator(loginUrl, withUserInfo("user-1", "user-1@microblogging.com", "123456"))
                                 .authenticate()
                                 .successful();
+        }
+
+        @Test
+        @DisplayName("Avoid duplicated handle")
+        void avoidDuplicatedHandleTest() {
+                givenUserCreator(userUrl, loginUrl).create("user-1", "user-1@microblogging.com", "123456")
+                                .successful();
+                givenUserCreator(userUrl, loginUrl).create("user-2", "user-1@microblogging.com", "789456")
+                                .conflict();
+                givenUserCreator(userUrl, loginUrl).create("user-1", "user-2@microblogging.com", "789456")
+                                .conflict();
         }
 }

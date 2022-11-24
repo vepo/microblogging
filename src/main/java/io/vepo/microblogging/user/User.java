@@ -13,14 +13,18 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "tb_users")
+@NamedQuery(name = "user-by-email", query = "FROM User where email = :email")
+@NamedQuery(name = "user-by-handle", query = "FROM User where handle = :handle")
 @NamedQuery(name = "user-login", query = "FROM User where handle = :handle and hashedPassword = :hashedPassword")
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(unique = true)
     private String handle;
 
+    @Column(unique = true)
     private String email;
 
     @Column(name = "hashed_password")
