@@ -26,7 +26,7 @@ public class CleanupDatabaseExtension implements QuarkusTestAfterTestExecutionCa
                         while (tables.next()) {
                             String tableName = tables.getString("TABLE_NAME");
                             logger.info("Selecting table({})...", tableName);
-                            var rowsDeleted = conn.createStatement().executeUpdate("TRUNCATE " + tableName + " RESTART IDENTITY");
+                            var rowsDeleted = conn.createStatement().executeUpdate("TRUNCATE " + tableName + " RESTART IDENTITY;");
                             logger.info("Rows {} deleted from {}", rowsDeleted, tableName);
                         }
                     }

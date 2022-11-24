@@ -79,7 +79,7 @@ public class Post {
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, authorId, content, createdAt);
+        return Objects.hash(id);
     }
 
     @Override
@@ -92,10 +92,7 @@ public class Post {
             return false;
         }
         Post other = (Post) obj;
-        return Objects.equals(id, other.id)
-                && Objects.equals(authorId, other.authorId)
-                && Objects.equals(content, other.content)
-                && Objects.equals(createdAt, other.createdAt);
+        return Objects.equals(id, other.id);
     }
 
     @Override

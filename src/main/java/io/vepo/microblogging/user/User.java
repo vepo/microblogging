@@ -86,7 +86,7 @@ public class User {
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, handle, email, hashedPassword, createdAt);
+        return Objects.hash(id);
     }
 
     @Override
@@ -99,11 +99,7 @@ public class User {
             return false;
         }
         User other = (User) obj;
-        return Objects.equals(id, other.id)
-                && Objects.equals(handle, other.handle)
-                && Objects.equals(email, other.email)
-                && Objects.equals(hashedPassword, other.hashedPassword)
-                && Objects.equals(createdAt, other.createdAt);
+        return Objects.equals(id, other.id);
     }
 
     @Override
