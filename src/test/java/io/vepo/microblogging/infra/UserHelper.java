@@ -6,6 +6,9 @@ import java.net.URL;
 
 import javax.ws.rs.core.HttpHeaders;
 
+import org.testcontainers.shaded.org.yaml.snakeyaml.emitter.Emitable;
+
+import groovyjarjarantlr4.v4.automata.ATNFactory.Handle;
 import io.restassured.http.ContentType;
 import io.restassured.http.Header;
 import io.restassured.response.ValidatableResponse;
@@ -14,51 +17,68 @@ import io.vepo.microblogging.user.Credentials;
 
 public class UserHelper {
 
-    public static final String DEFAULT_HANDLE = "user";
-    public static final String DEFAULT_EMAIL = "user@microblogging.com";
-    public static final String DEFAULT_PASSWORD = "123456";
-
-    private static record UserInfo(String handle, String email, String password) {
+    public interface Authenticator {
+        AuthenticatedUserResponse authenticate();
     }
 
     public static class UserCreator {
         private final URL userUrl;
         private final URL loginUrl;
 
-        private UserCreator(URL userUrl, URL loginUrl) {
+        private UserCreator(final URL userUrl, final URL loginUrl) {
             this.userUrl = userUrl;
             this.loginUrl = loginUrl;
         }
 
-        public UserCreatorResponse create(String handle, String email, String password) {
-            return new UserCreatorResponse(loginUrl, new UserInfo(handle, email, password),
+        public UserCreated create(final String handle, final String email, final String password) {
+            return new UserCreated(loginUrl, new UserInfo(handle, email, password),
                     given().contentType(ContentType.JSON)
                             .body(new CreateUserRequest(handle, email, password))
                             .post(userUrl)
                             .then());
         }
 
-        public UserCreatorResponse create() {
+        public UserCreated create() {
             return create(DEFAULT_HANDLE, DEFAULT_EMAIL, DEFAULT_PASSWORD);
         }
     }
 
-    public static class UserCreatorResponse {
+    public static class GivenCredentials implements Authenticator {
+        private final URL loginUrl;
+        private final UserInfo userInfo;
+
+        private GivenCredentials(final URL loginUrl, final UserInfo userInfo) {
+            this.loginUrl = loginUrl;
+            this.userInfo = userInfo;
+        }
+
+        @Override
+        public AuthenticatedUserResponse authenticate() {
+            return new AuthenticatedUserResponse(given().contentType(ContentType.JSON)
+                    .body(new Credentials(userInfo.handle(), userInfo.password()))
+                    .post(loginUrl)
+                    .then());
+        }
+
+    }
+
+    public static class UserCreated implements Authenticator {
         private final URL loginUrl;
         private final UserInfo userInfo;
         private final ValidatableResponse httpResponse;
 
-        public UserCreatorResponse(URL loginUrl, UserInfo userInfo, ValidatableResponse httpResponse) {
+        public UserCreated(final URL loginUrl, final UserInfo userInfo, final ValidatableResponse httpResponse) {
             this.loginUrl = loginUrl;
             this.userInfo = userInfo;
             this.httpResponse = httpResponse;
         }
 
-        public UserCreatorResponse successful() {
+        public UserCreated successful() {
             this.httpResponse.statusCode(201);
             return this;
         }
 
+        @Override
         public AuthenticatedUserResponse authenticate() {
             return new AuthenticatedUserResponse(given().contentType(ContentType.JSON)
                     .body(new Credentials(userInfo.handle(), userInfo.password()))
@@ -71,7 +91,7 @@ public class UserHelper {
 
         private final ValidatableResponse httpResponse;
 
-        public AuthenticatedUserResponse(ValidatableResponse httpResponse) {
+        public AuthenticatedUserResponse(final ValidatableResponse httpResponse) {
             this.httpResponse = httpResponse;
         }
 
@@ -89,10 +109,36 @@ public class UserHelper {
             return new Header(HttpHeaders.AUTHORIZATION, "Bearer " + jwtToken());
         }
 
+        public AuthenticatedUserResponse unauthorized() {
+            this.httpResponse.statusCode(401);
+            return this;
+        }
+
     }
 
-    public static UserCreator givenUserCreator(URL userUrl, URL loginUrl) {
+    public static record UserInfo(String handle, String email, String password) {
+    }
+
+    public static final String DEFAULT_HANDLE = "user";
+
+    public static final String DEFAULT_EMAIL = "user@microblogging.com";
+
+    public static final String DEFAULT_PASSWORD = "123456";
+
+    public static UserCreator givenUserCreator(final URL userUrl, final URL loginUrl) {
         return new UserCreator(userUrl, loginUrl);
+    }
+
+    public static Authenticator givenAuthenticator(final URL loginUrl) {
+        return givenAuthenticator(loginUrl, new UserInfo(DEFAULT_HANDLE, DEFAULT_EMAIL, DEFAULT_PASSWORD));
+    }
+
+    public static Authenticator givenAuthenticator(final URL loginUrl, final UserInfo userInfo) {
+        return new GivenCredentials(loginUrl, userInfo);
+    }
+
+    public static UserInfo withUserInfo(final String handle, final String email, final String password) {
+        return new UserInfo(handle, email, password);
     }
 
 }

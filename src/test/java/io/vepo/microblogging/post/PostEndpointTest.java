@@ -26,13 +26,13 @@ import io.quarkus.test.common.http.TestHTTPResource;
 import io.quarkus.test.junit.QuarkusTest;
 import io.restassured.common.mapper.TypeRef;
 import io.restassured.http.ContentType;
-import io.vepo.microblogging.infra.CustomResource;
+import io.vepo.microblogging.infra.TestContainerPostgreResource;
 import io.vepo.microblogging.user.LoginEndpoint;
 import io.vepo.microblogging.user.UserEndpoint;
 
 @QuarkusTest
 @DisplayName("Post Endpoint")
-@QuarkusTestResource(value = CustomResource.class)
+@QuarkusTestResource(value = TestContainerPostgreResource.class)
 @TestMethodOrder(OrderAnnotation.class)
 class PostEndpointTest {
 
@@ -49,7 +49,6 @@ class PostEndpointTest {
         URL loginUrl;
 
         @Test
-        @Order(1)
         @DisplayName("Listing all posts")
         void testPostListTest() {
                 var response = given().when()
@@ -61,7 +60,6 @@ class PostEndpointTest {
         }
 
         @Test
-        @Order(2)
         @DisplayName("Listing Posts with pagination")
         void listingPostsTest() throws MalformedURLException {
                 var authorizationHeader = givenUserCreator(userUrl, loginUrl)
@@ -151,7 +149,6 @@ class PostEndpointTest {
         }
 
         @Test
-        @Order(3)
         @DisplayName("Create Post")
         void createPostTest() {
                 var authorizationHeader = givenUserCreator(userUrl, loginUrl)
@@ -175,13 +172,12 @@ class PostEndpointTest {
                 assertEquals(200, response.statusCode());
                 var body = response.jsonPath()
                                 .getList(".", Post.class);
-                assertThat(body).hasSizeGreaterThan(1)
+                assertThat(body).hasSize(1)
                                 .anyMatch(p -> p.getContent().equals("Test" + uuid))
                                 .allMatch(p -> p.getId() > 0l);
         }
 
         @Test
-        @Order(4)
         @DisplayName("Delete Post")
         void deletePostTest() {
                 var authorizationHeader = givenUserCreator(userUrl, loginUrl)
@@ -207,14 +203,11 @@ class PostEndpointTest {
                                 .thenReturn();
                 var body = response.jsonPath()
                                 .getList(".", Post.class);
-                assertThat(body)
-                                .isNotEmpty()
-                                .doesNotContain(post);
+                assertThat(body).isEmpty();
 
         }
 
         @Test
-        @Order(5)
         @DisplayName("Access Post")
         void accessPostTest() {
                 var authorizationHeader = givenUserCreator(userUrl, loginUrl)

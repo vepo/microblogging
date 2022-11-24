@@ -29,6 +29,6 @@ public class LoginEndpoint {
     public Response login(Credentials credentials) {
         return users.findByHandleAndPassword(credentials.handle(), credentials.password())
                 .map(user -> Response.ok(jwtUtils.generate(user)))
-                .orElseGet(() -> Response.status(403)).build();
+                .orElseGet(() -> Response.status(401)).build();
     }
 }
