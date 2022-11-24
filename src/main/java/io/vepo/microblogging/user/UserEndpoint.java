@@ -65,7 +65,7 @@ public class UserEndpoint {
     public UserProfile findProfile(String userHandle) {
         return users.findUserByHandle(userHandle)
                     .map(user -> new UserProfile(user.getId(), user.getHandle(), user.getCreatedAt()))
-                    .orElseThrow(() -> new NotFoundException(String.format("User does not exists! userHandle=%d", userHandle)));
+                    .orElseThrow(() -> new NotFoundException(String.format("User does not exists! userHandle=%s", userHandle)));
     }
 
     @GET
@@ -88,10 +88,10 @@ public class UserEndpoint {
     public Page<Post> postStreamByUserHandle(@PathParam("userHandle") String userHandle,
                                              @DefaultValue("0") @QueryParam("page") int page,
                                              @DefaultValue("10") @QueryParam("pageSize") int pageSize) {
-        logger.info("Retrieving Stream: userHandle={} page={} pageSize={}", userHandle, page, pageSize);
+        logger.info("Retrieving Stream: page={} pageSize={}", userHandle, page, pageSize);
         return users.findUserByHandle(userHandle)
                     .map(user -> new Page<>(page * pageSize, posts.listByAuthorId(user.getId(), page * pageSize, pageSize)))
-                    .orElseThrow(() -> new NotFoundException(String.format("User does not exist! userHandle=%d", userHandle)));
+                    .orElseThrow(() -> new NotFoundException(String.format("User does not exist! userHandle=%s", userHandle)));
     }
 
 
