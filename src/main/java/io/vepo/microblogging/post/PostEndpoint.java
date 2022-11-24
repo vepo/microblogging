@@ -17,15 +17,29 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.SecurityContext;
+
+import org.eclipse.microprofile.jwt.Claim;
+import org.eclipse.microprofile.jwt.Claims;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import io.vepo.microblogging.user.Users;
 
 @Path("/post")
 @ApplicationScoped
 public class PostEndpoint {
 
+    private static final Logger logger = LoggerFactory.getLogger(PostEndpoint.class);
+
     @Inject
     Posts posts;
+
+    @Inject
+    Users user;
 
     @GET
     @Path("/")
@@ -42,12 +56,17 @@ public class PostEndpoint {
         return new Page<>(page * pageSize, posts.list(page * pageSize, pageSize));
     }
 
+    @Inject
+    @Claim(standard = Claims.sub)
+    String subject; 
+
     @POST
     @RolesAllowed({ "USER" })
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response createPost(CreatePostRequest newPost) throws URISyntaxException {
-        var post = posts.createPost(new Post(newPost.content()));
+    public Response createPost(CreatePostRequest newPost, @Context SecurityContext ctx) throws URISyntaxException {
+        logger.info("Creating post! request={}, authorId={} context={}", newPost, subject, ctx.getUserPrincipal());
+        var post = posts.createPost(new Post(Long.valueOf(subject), newPost.content()));
         return Response.created(new URI(String.format("/post/%d", post.getId()))).entity(post).build();
     }
 

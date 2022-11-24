@@ -4,7 +4,7 @@ import static io.vepo.microblogging.user.UserActions.DEFAULT_EMAIL;
 import static io.vepo.microblogging.user.UserActions.DEFAULT_HANDLE;
 import static io.vepo.microblogging.user.UserActions.DEFAULT_PASSWORD;
 import static io.vepo.microblogging.user.UserActions.givenAuthenticator;
-import static io.vepo.microblogging.user.UserActions.givenUserCreator;
+import static io.vepo.microblogging.user.UserActions.userCreator;
 import static io.vepo.microblogging.user.UserActions.withUserInfo;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -43,7 +43,7 @@ public class LoginTest {
     @Test
     @DisplayName("It should not allow login if the user doesn't exists")
     public void wrongPasswordLoginTest() {
-        givenUserCreator(userUrl, loginUrl).create().successful();
+        userCreator(userUrl, loginUrl).create().successful();
         var response = givenAuthenticator(loginUrl, withUserInfo(DEFAULT_HANDLE, DEFAULT_EMAIL, DEFAULT_PASSWORD + 'X'))
                 .authenticate()
                 .response();

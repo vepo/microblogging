@@ -3,6 +3,7 @@ package io.vepo.microblogging.user;
 import static io.restassured.RestAssured.given;
 
 import java.net.URL;
+import java.util.Map;
 
 import javax.ws.rs.core.HttpHeaders;
 
@@ -13,12 +14,8 @@ import io.restassured.http.ContentType;
 import io.restassured.http.Header;
 import io.restassured.response.Response;
 import io.restassured.response.ValidatableResponse;
-import io.vepo.microblogging.user.CreateUserRequest;
-import io.vepo.microblogging.user.Credentials;
 
 public class UserActions {
-
-    private static final Logger logger = LoggerFactory.getLogger(UserActions.class);
 
     public interface Authenticator {
         AuthenticatedUserResponse authenticate();
@@ -142,13 +139,47 @@ public class UserActions {
     public static record UserInfo(String handle, String email, String password) {
     }
 
+    public static class UserProfileViewer {
+
+        private final URL userUrl;
+
+        public UserProfileViewer(URL userUrl) {
+            this.userUrl = userUrl;
+        }
+
+        public UserProfileViewed view(Long userId) {
+            return new UserProfileViewed(given().get(userUrl.toExternalForm() + "/{userId}", Map.of("userId", userId))
+                                                .thenReturn());
+        }
+
+        public UserProfileViewed view(String userHandle) {
+            return new UserProfileViewed(given().get(userUrl.toExternalForm() + "/{userHandle}", Map.of("userHandle", userHandle))
+                                                .thenReturn());
+        }
+    }
+
+    public static class UserProfileViewed {
+
+        private final Response response;
+
+        public UserProfileViewed(Response response) {
+            this.response = response;
+        }
+
+        public Response response() {
+            return response;
+        }
+    }
+
+    private static final Logger logger = LoggerFactory.getLogger(UserActions.class);
+
     public static final String DEFAULT_HANDLE = "user";
 
     public static final String DEFAULT_EMAIL = "user@microblogging.com";
 
     public static final String DEFAULT_PASSWORD = "123456";
 
-    public static UserCreator givenUserCreator(final URL userUrl, final URL loginUrl) {
+    public static UserCreator userCreator(final URL userUrl, final URL loginUrl) {
         return new UserCreator(userUrl, loginUrl);
     }
 
@@ -156,12 +187,17 @@ public class UserActions {
         return givenAuthenticator(loginUrl, new UserInfo(DEFAULT_HANDLE, DEFAULT_EMAIL, DEFAULT_PASSWORD));
     }
 
+
     public static Authenticator givenAuthenticator(final URL loginUrl, final UserInfo userInfo) {
         return new GivenCredentials(loginUrl, userInfo);
     }
 
     public static UserInfo withUserInfo(final String handle, final String email, final String password) {
         return new UserInfo(handle, email, password);
+    }
+
+    public static UserProfileViewer userProfileViewer(URL userUrl) {
+        return new UserProfileViewer(userUrl);
     }
 
 }

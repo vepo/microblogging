@@ -4,18 +4,21 @@ import static io.restassured.RestAssured.given;
 
 import java.net.URL;
 import java.util.Map;
-import java.util.function.Function;
+import java.util.Objects;
 import java.util.function.IntFunction;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
-import io.restassured.RestAssured;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import io.restassured.http.ContentType;
 import io.restassured.http.Header;
 import io.restassured.response.Response;
-import io.restassured.response.ValidatableResponse;
 
 public class PostActions {
+    private static final Logger logger = LoggerFactory.getLogger(PostActions.class);
+    
     public static class PostLister {
         private final URL postUrl;
 
@@ -24,26 +27,53 @@ public class PostActions {
         }
 
         public PostListing list() {
-            return new PostListing(postUrl, given().when()
-                    .get(postUrl)
-                    .thenReturn());
+            return new PostListing(given().when()
+                                          .get(postUrl)
+                                          .thenReturn());
         }
 
         public PagedPostListing list(int page, int pageSize) {
-            return new PagedPostListing(postUrl, given().queryParam("page", page)
-                                                        .queryParam("pageSize", pageSize)
-                                                        .get(postUrl.toExternalForm() + "/stream")
-                                                        .thenReturn());
+            return new PagedPostListing(given().queryParam("page", page)
+                                               .queryParam("pageSize", pageSize)
+                                               .get(postUrl.toExternalForm() + "/stream")
+                                               .thenReturn());
+        }
+
+    }
+
+    public static class PostListerByUser {
+        private final URL userUrl;
+        private final UserId userId;
+        private final UserHandle userHandle;
+
+        public PostListerByUser(URL userUrl, UserId userId, UserHandle userHandle) {
+            this.userUrl = userUrl;
+            this.userId = userId;
+            this.userHandle = userHandle;
+        }
+
+        public PagedPostListing list(int page, int pageSize) {
+            logger.info("Retrieving stream for user... url={}", retrieveUrl());
+            return new PagedPostListing(given().queryParam("page", page)
+                                               .queryParam("pageSize", pageSize)
+                                               .get(retrieveUrl())
+                                               .thenReturn());
+        }
+
+        private String retrieveUrl() {
+            if (Objects.nonNull(userId)) {
+                return userUrl.toExternalForm() + "/" + userId.id() + "/stream";
+            } else {
+                return userUrl.toExternalForm() + "/" + userHandle.userHandle() + "/stream";
+            }
         }
 
     }
 
     public static class PostListing {
-        private final URL postUrl;
         private Response response;
 
-        public PostListing(URL postUrl, Response response) {
-            this.postUrl = postUrl;
+        public PostListing(Response response) {
             this.response = response;
         }
 
@@ -54,11 +84,9 @@ public class PostActions {
     }
 
     public static class PagedPostListing {
-        private final URL postUrl;
         private Response response;
 
-        public PagedPostListing(URL postUrl, Response response) {
-            this.postUrl = postUrl;
+        public PagedPostListing(Response response) {
             this.response = response;
         }
 
@@ -69,13 +97,9 @@ public class PostActions {
     }
 
     public static class PostCreated {
-        private final URL postUrl;
-        private final Header authorizationHeader;
         private final Response response;
 
-        public PostCreated(URL postUrl, Header authorizationHeader, Response response) {
-            this.postUrl = postUrl;
-            this.authorizationHeader = authorizationHeader;
+        public PostCreated(Response response) {
             this.response = response;
         }
 
@@ -94,12 +118,12 @@ public class PostActions {
         }
 
         public PostCreated create(CreatePostRequest request) {
-            return new PostCreated(postUrl, authorizationHeader, given().contentType(ContentType.JSON)
-                                                                        .header(authorizationHeader)
-                                                                        .body(request)
-                                                                        .when()
-                                                                        .post(postUrl)
-                                                                        .thenReturn());
+            return new PostCreated(given().contentType(ContentType.JSON)
+                                          .header(authorizationHeader)
+                                          .body(request)
+                                          .when()
+                                          .post(postUrl)
+                                          .thenReturn());
         }
 
         public Stream<PostCreated> create(int postCount, IntFunction<CreatePostRequest> requestSupplier) {
@@ -169,8 +193,20 @@ public class PostActions {
         }
     }
 
+    public static record UserId(Long id) {}
+
+    public static record UserHandle(String userHandle) {}
+
     public static PostLister postLister(URL postUrl) {
         return new PostLister(postUrl);
+    }
+
+    public static PostListerByUser postLister(URL userUrl, UserId userId) {
+        return new PostListerByUser(userUrl, userId, null);
+    }
+
+    public static PostListerByUser postLister(URL userUrl, UserHandle userHandle) {
+        return new PostListerByUser(userUrl, null, userHandle);
     }
 
     public static PostCreator postCreator(URL postUrl, Header authorizationHeader) {
@@ -180,9 +216,15 @@ public class PostActions {
     public static PostCleaner postCleaner(URL postUrl) {
         return new PostCleaner(postUrl);
     }
-
     public static PostViewer postViewer(URL postUrl) {
         return new PostViewer(postUrl);
     }
 
+    public static UserId byUserId(Long id) {
+        return new UserId(id);
+    }
+
+    public static UserHandle byUserHandle(String handle) {
+        return new UserHandle(handle);
+    }
 }

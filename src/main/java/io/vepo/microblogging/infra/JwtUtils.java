@@ -10,6 +10,8 @@ import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 
 import org.eclipse.microprofile.config.inject.ConfigProperty;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.nimbusds.jose.JOSEException;
 import com.nimbusds.jose.JOSEObjectType;
@@ -24,6 +26,7 @@ import io.vepo.microblogging.user.User;
 
 @ApplicationScoped
 public class JwtUtils {
+    private static final Logger logger = LoggerFactory.getLogger(JwtUtils.class);
     @Inject
     @ConfigProperty(name = "mp.jwt.verify.issuer")
     String issuer;
@@ -35,6 +38,7 @@ public class JwtUtils {
     int expirationTimeInMinutes;
 
     public String generate(User user) {
+        logger.info("Generating token for user! user={}", user);
         try {
             var now = Date.from(Instant.now());
             var jwtClaims = new JWTClaimsSet.Builder().issuer(issuer)

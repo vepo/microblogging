@@ -1,12 +1,11 @@
 package io.vepo.microblogging.post;
 
-import static io.restassured.RestAssured.given;
 import static io.vepo.microblogging.infra.DataExtractor.postPage;
 import static io.vepo.microblogging.post.PostActions.postCleaner;
 import static io.vepo.microblogging.post.PostActions.postCreator;
 import static io.vepo.microblogging.post.PostActions.postLister;
 import static io.vepo.microblogging.post.PostActions.postViewer;
-import static io.vepo.microblogging.user.UserActions.givenUserCreator;
+import static io.vepo.microblogging.user.UserActions.userCreator;
 import static io.vepo.microblogging.validators.Validators.lenght;
 import static io.vepo.microblogging.validators.Validators.offset;
 import static io.vepo.microblogging.validators.Validators.statusCode;
@@ -14,18 +13,15 @@ import static java.util.UUID.randomUUID;
 import static java.util.stream.IntStream.range;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.util.Arrays.array;
-import static org.hamcrest.Matchers.matchesPattern;
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.Map;
 import java.util.function.IntFunction;
 
 import javax.ws.rs.core.Response.Status;
 
-import org.hamcrest.Matchers;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
 import org.junit.jupiter.api.Test;
@@ -35,7 +31,6 @@ import io.quarkus.test.common.QuarkusTestResource;
 import io.quarkus.test.common.http.TestHTTPEndpoint;
 import io.quarkus.test.common.http.TestHTTPResource;
 import io.quarkus.test.junit.QuarkusTest;
-import io.restassured.http.ContentType;
 import io.vepo.microblogging.infra.TestContainerPostgreResource;
 import io.vepo.microblogging.post.PostActions.PostCreated;
 import io.vepo.microblogging.user.LoginEndpoint;
@@ -71,11 +66,11 @@ class PostTest {
         @Test
         @DisplayName("It should allow create a post for logged User")
         void createPostTest() throws MalformedURLException {
-                var authorizationHeader = givenUserCreator(userUrl, loginUrl).create()
-                                                                             .successful()
-                                                                             .authenticate()
-                                                                             .successful()
-                                                                             .authorizationHeader();
+                var authorizationHeader = userCreator(userUrl, loginUrl).create()
+                                                                        .successful()
+                                                                        .authenticate()
+                                                                        .successful()
+                                                                        .authorizationHeader();
                 var uuid = randomUUID().toString();
                 var response = postCreator(postUrl, authorizationHeader).create(new CreatePostRequest("POST-" + uuid))
                                                                         .response();
@@ -91,7 +86,7 @@ class PostTest {
         @DisplayName("It should allow paginated listing")
         void paginatedListPostTest() throws MalformedURLException {
                 IntFunction<String> postNaming = index -> "POST-" + index;
-                var authorizationHeader = givenUserCreator(userUrl, loginUrl).create()
+                var authorizationHeader = userCreator(userUrl, loginUrl).create()
                                                                              .successful()
                                                                              .authenticate()
                                                                              .successful()
@@ -147,7 +142,7 @@ class PostTest {
         @Test
         @DisplayName("Delete Post")
         void deletePostTest() {
-                var authorizationHeader = givenUserCreator(userUrl, loginUrl).create()
+                var authorizationHeader = userCreator(userUrl, loginUrl).create()
                                                                              .successful()
                                                                              .authenticate()
                                                                              .successful()
@@ -167,7 +162,7 @@ class PostTest {
         @Test
         @DisplayName("Access Post")
         void accessPostTest() {
-                var authorizationHeader = givenUserCreator(userUrl, loginUrl).create()
+                var authorizationHeader = userCreator(userUrl, loginUrl).create()
                                                                              .successful()
                                                                              .authenticate()
                                                                              .successful()

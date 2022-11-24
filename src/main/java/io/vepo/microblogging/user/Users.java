@@ -60,4 +60,8 @@ public class Users {
                 .stream()
                 .findFirst();
     }
+
+    public Optional<User> findUserById(Long userId) {
+        return Optional.ofNullable(em.find(User.class, userId));
+    }
 }
