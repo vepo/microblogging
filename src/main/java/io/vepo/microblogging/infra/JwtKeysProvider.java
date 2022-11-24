@@ -1,15 +1,19 @@
 package io.vepo.microblogging.infra;
 
 import java.security.KeyFactory;
+import java.security.NoSuchAlgorithmException;
 import java.security.PrivateKey;
 import java.security.PublicKey;
 import java.security.interfaces.RSAPublicKey;
+import java.security.spec.InvalidKeySpecException;
 import java.security.spec.PKCS8EncodedKeySpec;
 import java.security.spec.X509EncodedKeySpec;
 import java.util.Base64;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.inject.Produces;
+
+import com.nimbusds.jose.util.StandardCharset;
 
 @ApplicationScoped
 public class JwtKeysProvider {
@@ -18,7 +22,7 @@ public class JwtKeysProvider {
         try {
             return (RSAPublicKey) decodePublicKey(new String(
                     JwtKeysProvider.class.getResourceAsStream("/META-INF/resources/publicKey.pem").readAllBytes(),
-                    "UTF-8"));
+                    StandardCharset.UTF_8));
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -29,7 +33,7 @@ public class JwtKeysProvider {
         try {
             return readPrivateKey("/privateKey.pem");
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            throw new IllegalStateException("Private key could not be find!", e);
         }
     }
 
@@ -42,7 +46,7 @@ public class JwtKeysProvider {
      */
     public static PrivateKey readPrivateKey(final String pemResName) throws Exception {
         return decodePrivateKey(
-                new String(JwtKeysProvider.class.getResourceAsStream(pemResName).readAllBytes(), "UTF-8"));
+                new String(JwtKeysProvider.class.getResourceAsStream(pemResName).readAllBytes(), StandardCharset.UTF_8));
     }
 
     /**
@@ -50,9 +54,10 @@ public class JwtKeysProvider {
      *
      * @param pemEncoded - PEM string for private key
      * @return PrivateKey
-     * @throws Exception on decode failure
+     * @throws NoSuchAlgorithmException
+     * @throws InvalidKeySpecException
      */
-    public static PrivateKey decodePrivateKey(final String pemEncoded) throws Exception {
+    public static PrivateKey decodePrivateKey(final String pemEncoded) throws InvalidKeySpecException, NoSuchAlgorithmException {
         return KeyFactory.getInstance("RSA")
                 .generatePrivate(new PKCS8EncodedKeySpec(toEncodedBytes(pemEncoded)));
     }
@@ -62,9 +67,10 @@ public class JwtKeysProvider {
      *
      * @param pemEncoded - PEM string for private key
      * @return PublicKey
-     * @throws Exception on decode failure
+     * @throws NoSuchAlgorithmException
+     * @throws InvalidKeySpecException
      */
-    public static PublicKey decodePublicKey(String pemEncoded) throws Exception {
+    public static PublicKey decodePublicKey(String pemEncoded) throws InvalidKeySpecException, NoSuchAlgorithmException {
         return KeyFactory.getInstance("RSA")
                 .generatePublic(new X509EncodedKeySpec(toEncodedBytes(pemEncoded)));
     }
