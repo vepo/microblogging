@@ -21,9 +21,9 @@ describe('AuthService', () => {
 
   it('should allow register an user', () => {
     service.register({
-      username: "user",
-      email: "user@microblogging.com",
-      password: "123456"
+      username: "user", //NOSONAR
+      email: "user@microblogging.com", //NOSONAR
+      password: "123456" //NOSONAR
     }).subscribe({
       next: res => expect(res).toBeTruthy(),
       error: fail
@@ -34,8 +34,8 @@ describe('AuthService', () => {
 
   it('should allow create a JWT Token', () => {
     service.login({
-      username: "user",
-      password: "123456"
+      username: "user", //NOSONAR
+      password: "123456" //NOSONAR
     }).subscribe({
       next: res => expect(res).toBeTruthy(),
       error: fail
