@@ -88,7 +88,7 @@ public class UserEndpoint {
     public Page<Post> postStreamByUserHandle(@PathParam("userHandle") String userHandle,
                                              @DefaultValue("0") @QueryParam("page") int page,
                                              @DefaultValue("10") @QueryParam("pageSize") int pageSize) {
-        logger.info("Retrieving Stream: page={} pageSize={}", userHandle, page, pageSize);
+        logger.info("Retrieving Stream: page={} pageSize={}", page, pageSize);
         return users.findUserByHandle(userHandle)
                     .map(user -> new Page<>(page * pageSize, posts.listByAuthorId(user.getId(), page * pageSize, pageSize)))
                     .orElseThrow(() -> new NotFoundException(String.format("User does not exist! userHandle=%s", userHandle)));
