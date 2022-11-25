@@ -13,9 +13,6 @@ export class MbEditorComponent {
 
   create() {
     this.postService.create({ content: this.content })
-      .subscribe(post => {
-        console.log("Post created", post);
-        this.content = "";
-      });
+      .subscribe(post => this.content = "");
   }
 }

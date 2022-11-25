@@ -19,7 +19,6 @@ export class PostService {
   }
 
   getPosts(offset: number = 0): Observable<Page<Post>> {
-    console.log("Loading page", `page: ${Math.ceil(offset / 15)}`, `offset: ${offset}`);
     return this.http.get<Page<Post>>(this.streamPostUrl, {
       params: {
         pageSize: 15,

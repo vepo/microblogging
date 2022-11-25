@@ -24,14 +24,8 @@ export class MbViewerComponent implements OnInit {
   delete(): void {
     this.postService.delete(this.post)
       .subscribe({
-        next: (post) => {
-          console.log(post);
-          this.router.navigate(['/']);
-        },
-        error: (error) => {
-          console.log(error);
-          this.router.navigate(['/']);
-        }
+        next: (post) => this.router.navigate(['/']),
+        error: (error) => this.router.navigate(['/'])
       });
   }
 }
