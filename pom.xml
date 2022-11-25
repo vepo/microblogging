@@ -18,7 +18,7 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     <quarkus.version>2.14.1.Final</quarkus.version>
-    <sonar.coverage.exclusions>**src/test/**</sonar.coverage.exclusions>
+    <sonar.coverage.exclusions>**src/test/**,**/*.spec.ts</sonar.coverage.exclusions>
     <sonar.host.url>https://sonarcloud.io</sonar.host.url>
     <sonar.organization>vepo-github</sonar.organization>
     <testcontainers.version>1.17.3</testcontainers.version>
