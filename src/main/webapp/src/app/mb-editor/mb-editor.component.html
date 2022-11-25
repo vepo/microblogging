@@ -9,7 +9,7 @@
     </div>
     <div>
         <div class="btns">
-            <button class="btn-create" (click)="create()">Post</button>
+            <button class="btn-create" (click)="create()" [disabled]="content.trim().length == 0">Post</button>
         </div>
     </div>
 </div>

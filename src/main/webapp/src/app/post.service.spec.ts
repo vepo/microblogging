@@ -6,19 +6,17 @@ import { PostService } from './post.service';
 
 describe('PostService', () => {
   let postService: PostService;
-  let httpClient: HttpClient;
   let httpTestingController: HttpTestingController;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({ imports: [HttpClientTestingModule] }).compileComponents();
-    httpClient = TestBed.inject(HttpClient);
     httpTestingController = TestBed.inject(HttpTestingController);
     postService = TestBed.inject(PostService);
   });
 
   afterEach(() => {
     httpTestingController.verify();
-  })
+  });
 
   it('should be created', () => {
     expect(postService).toBeTruthy();

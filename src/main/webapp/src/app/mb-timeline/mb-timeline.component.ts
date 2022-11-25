@@ -25,6 +25,7 @@ export class MbTimelineComponent implements OnInit {
   }
 
   @HostListener('window:scroll', ['$event'])
+  @HostListener('document:scroll', ['$event'])
   onScroll(event: Event) {
     if (this.hasMore && !this.loadingItems && event.target instanceof Document) {
       let scrollTop = typeof event.target.scrollingElement?.scrollTop == 'number' ? event.target.scrollingElement.scrollTop : 0;
