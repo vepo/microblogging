@@ -9,7 +9,9 @@ describe('PostService', () => {
   let httpTestingController: HttpTestingController;
 
   beforeEach(async () => {
-    await TestBed.configureTestingModule({ imports: [HttpClientTestingModule] }).compileComponents();
+    await TestBed.configureTestingModule({
+      imports: [HttpClientTestingModule]
+    }).compileComponents();
     httpTestingController = TestBed.inject(HttpTestingController);
     postService = TestBed.inject(PostService);
   });

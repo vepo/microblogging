@@ -1,8 +1,10 @@
-import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { CreatePostRequest, Post } from './posts/posts.model';
+import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { Page } from './posts/page.model';
+
+import { Page } from '../_model/page.model';
+import { CreatePostRequest, Post } from '../_model/posts.model';
+
 
 @Injectable({
   providedIn: 'root'
