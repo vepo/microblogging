@@ -2,22 +2,25 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { CreatePostRequest, Post } from './posts/posts.model';
 import { Observable } from 'rxjs';
-import { Pagging } from './posts/pagging.model';
+import { Page } from './posts/page.model';
 
 @Injectable({
   providedIn: 'root'
 })
 export class PostService {
+  mainPostUrl: string = "/api/post";
+  streamPostUrl: string = "/api/post/stream";
+
 
   constructor(private http: HttpClient) { }
 
   create(request: CreatePostRequest): Observable<Post> {
-    return this.http.post<Post>("/api/post", request);
+    return this.http.post<Post>(this.mainPostUrl, request);
   }
 
-  getPosts(offset: number = 0): Observable<Pagging<Post>> {
+  getPosts(offset: number = 0): Observable<Page<Post>> {
     console.log("Loading page", `page: ${Math.ceil(offset / 15)}`, `offset: ${offset}`);
-    return this.http.get<Pagging<Post>>("/api/post/stream", {
+    return this.http.get<Page<Post>>(this.streamPostUrl, {
       params: {
         pageSize: 15,
         page: Math.ceil(offset / 15)
