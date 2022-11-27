@@ -1,15 +1,16 @@
 export interface User {
-    username: string,
+    id: number,
+    handle: string,
     roles: string[]
 }
 
 export interface Credentials {
-    username: string,
+    handle: string,
     password: string
 }
 
 export interface RegisterRequest {
-    username: string,
+    handle: string,
     email: string,
     password: string
 }

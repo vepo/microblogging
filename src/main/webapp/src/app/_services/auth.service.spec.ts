@@ -21,7 +21,7 @@ describe('AuthService', () => {
 
   it('should allow register an user', () => {
     service.register({
-      username: "user", //NOSONAR
+      handle: "user", //NOSONAR
       email: "user@microblogging.com", //NOSONAR
       password: "123456" //NOSONAR
     }).subscribe({
@@ -34,7 +34,7 @@ describe('AuthService', () => {
 
   it('should allow create a JWT Token', () => {
     service.login({
-      username: "user", //NOSONAR
+      handle: "user", //NOSONAR
       password: "123456" //NOSONAR
     }).subscribe({
       next: res => expect(res).toBeTruthy(),

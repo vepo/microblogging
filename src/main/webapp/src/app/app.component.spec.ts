@@ -41,7 +41,8 @@ describe('AppComponent', () => {
   it(`should have as title 'MicroBlogging'`, async () => {
     tokeService.saveToken('ABCDEF');
     tokeService.saveUser({
-      username: 'john-doe',
+      id: 1,
+      handle: 'john-doe',
       roles: []
     });
     const fixture = TestBed.createComponent(AppComponent);

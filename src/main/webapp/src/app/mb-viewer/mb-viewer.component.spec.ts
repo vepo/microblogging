@@ -55,9 +55,7 @@ describe('MbViewerComponent', () => {
     fixture.detectChanges();
     await fixture.whenStable();
     const compiled = fixture.nativeElement as HTMLElement;
-    console.log(fixture.nativeElement)
     const btnDelete = fixture.nativeElement.querySelector('.btn-delete');
-    console.log(btnDelete);
     btnDelete.click();
   });
 });

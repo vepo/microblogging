@@ -25,7 +25,8 @@ describe('TokenStorageService', () => {
   it('should store users', () => {
     expect(service.getUser()).toBeNull();
     const user: User = {
-      username: "admin",
+      id: 1,
+      handle: "admin",
       roles: ['ADMIN', 'USER']
     };
     service.saveUser(user);
