@@ -9,6 +9,8 @@ import { MbEditorComponent } from './mb-editor/mb-editor.component';
 import { MbTimelineComponent } from './mb-timeline/mb-timeline.component';
 import { MbViewerComponent } from './mb-viewer/mb-viewer.component';
 import { RegisterComponent } from './register/register.component';
+import { LoginComponent } from './login/login.component';
+import { ProfileComponent } from './profile/profile.component';
 
 @NgModule({
   declarations: [
@@ -17,7 +19,9 @@ import { RegisterComponent } from './register/register.component';
     MbTimelineComponent,
     MbViewerComponent,
     HomeScreenComponent,
-    RegisterComponent
+    RegisterComponent,
+    LoginComponent,
+    ProfileComponent
   ],
   imports: [
     BrowserModule,
