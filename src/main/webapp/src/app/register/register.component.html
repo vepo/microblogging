@@ -22,7 +22,7 @@
                                     </div>
                                     <div class="form-white mb-4 text-start">
                                         <label for="email" class="form-label">Email</label>
-                                        <input type="email" class="form-control" name="email" formControlName="email" required email />
+                                        <input type="email" class="form-control" id="email" formControlName="email" required email />
                                         <div class="alert-danger" *ngIf="email && email.errors && !email.pristine">
                                             <div *ngIf="email && email.errors && email.errors['required']">Email is required</div>
                                             <div *ngIf="email && email.errors && email.errors['email']">Email must be a valid email address</div>
@@ -30,7 +30,7 @@
                                     </div>
                                     <div class="form-white mb-4 text-start">
                                         <label for="password" class="form-label">Password</label>
-                                        <input type="password" class="form-control" name="password" formControlName="password" required minlength="6" />
+                                        <input type="password" class="form-control" id="password" formControlName="password" required minlength="6" />
                                         <div class="alert-danger" *ngIf="password && password.errors && !password.pristine">
                                             <div *ngIf="password && password.errors && password.errors['required']">Password is required</div>
                                             <div *ngIf="password && password.errors && password.errors['minlength']">Password must be at least 6 characters</div>
