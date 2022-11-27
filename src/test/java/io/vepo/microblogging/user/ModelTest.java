@@ -15,7 +15,8 @@ public class ModelTest {
     void modelTest() {
         EqualsVerifier.forClass(User.class)
                 .usingGetClass()
-                .suppress(Warning.SURROGATE_KEY).verify();
+                .suppress(Warning.SURROGATE_KEY)
+                .verify();
         ToStringVerifier.forClass(User.class)
                 .withClassName(NameStyle.SIMPLE_NAME)
                 .verify();

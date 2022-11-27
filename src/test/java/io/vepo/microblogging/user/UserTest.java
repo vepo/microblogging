@@ -46,15 +46,15 @@ class UserTest {
         URL userUrl;
 
         @TestHTTPResource
-        @TestHTTPEndpoint(LoginEndpoint.class)
-        URL loginUrl;
+        @TestHTTPEndpoint(AuthenticationResource.class)
+        URL authUrl;
 
         @Test
         @DisplayName("It should allow creating users")
         void createUserTest() {
                 var beforeCreation = LocalDateTime.now();
-                var createUserResponse = userCreator(userUrl, loginUrl).create("user-1", "user-1@microblogging.com", "123456")
-                                                                       .response();
+                var createUserResponse = userCreator(authUrl).create("user-1", "user-1@microblogging.com", "123456")
+                                                             .response();
 
                 assertEquals(201, createUserResponse.statusCode(), "User creation endpoint should return 201 for success");
                 User createdUser = createUserResponse.as(User.class);
@@ -66,12 +66,12 @@ class UserTest {
         @Test
         @DisplayName("It should avoid creating users with duplicated handle/email")
         void avoidDuplicatedHandleTest() {
-                userCreator(userUrl, loginUrl).create("user-1", "user-1@microblogging.com", "123456")
-                                              .successful();
-                var failedHandleResponse = userCreator(userUrl, loginUrl).create("user-2", "user-1@microblogging.com", "789456")
-                                                                         .response();
-                var failedEmailResponse = userCreator(userUrl, loginUrl).create("user-1", "user-2@microblogging.com", "789456")
-                                                                        .response();
+                userCreator(authUrl).create("user-1", "user-1@microblogging.com", "123456")
+                                    .successful();
+                var failedHandleResponse = userCreator(authUrl).create("user-2", "user-1@microblogging.com", "789456")
+                                                               .response();
+                var failedEmailResponse = userCreator(authUrl).create("user-1", "user-2@microblogging.com", "789456")
+                                                              .response();
                 assertEquals(Status.CONFLICT.getStatusCode(), failedHandleResponse.statusCode(), "It should return Conflict");
                 assertEquals(Status.CONFLICT.getStatusCode(), failedEmailResponse.statusCode(), "It should return Conflict");
         }
@@ -83,7 +83,7 @@ class UserTest {
         @Test
         @DisplayName("It should allow view user profile")
         void userProfileTest() {
-                UserCreated createUser = userCreator(userUrl, loginUrl).create("user-1", "user-1@microblogging.com", "123456");
+                UserCreated createUser = userCreator(authUrl).create("user-1", "user-1@microblogging.com", "123456");
                 var createUserResponse = createUser.response();
                 UserProfileViewer userProfileViewer = userProfileViewer(userUrl);
                 User user = createUserResponse.as(User.class);

@@ -33,7 +33,7 @@ import io.quarkus.test.common.http.TestHTTPResource;
 import io.quarkus.test.junit.QuarkusTest;
 import io.vepo.microblogging.infra.TestContainerPostgreResource;
 import io.vepo.microblogging.post.PostActions.PostCreated;
-import io.vepo.microblogging.user.LoginEndpoint;
+import io.vepo.microblogging.user.AuthenticationResource;
 import io.vepo.microblogging.user.UserEndpoint;
 
 @QuarkusTest
@@ -51,8 +51,8 @@ class PostTest {
         URL userUrl;
 
         @TestHTTPResource
-        @TestHTTPEndpoint(LoginEndpoint.class)
-        URL loginUrl;
+        @TestHTTPEndpoint(AuthenticationResource.class)
+        URL authUrl;
 
         @Test
         @DisplayName("It should allow list all posts")
@@ -66,11 +66,11 @@ class PostTest {
         @Test
         @DisplayName("It should allow create a post for logged User")
         void createPostTest() throws MalformedURLException {
-                var authorizationHeader = userCreator(userUrl, loginUrl).create()
-                                                                        .successful()
-                                                                        .authenticate()
-                                                                        .successful()
-                                                                        .authorizationHeader();
+                var authorizationHeader = userCreator(authUrl).create()
+                                                              .successful()
+                                                              .authenticate()
+                                                              .successful()
+                                                              .authorizationHeader();
                 var uuid = randomUUID().toString();
                 var response = postCreator(postUrl, authorizationHeader).create(new CreatePostRequest("POST-" + uuid))
                                                                         .response();
@@ -86,11 +86,11 @@ class PostTest {
         @DisplayName("It should allow paginated listing")
         void paginatedListPostTest() throws MalformedURLException {
                 IntFunction<String> postNaming = index -> "POST-" + index;
-                var authorizationHeader = userCreator(userUrl, loginUrl).create()
-                                                                             .successful()
-                                                                             .authenticate()
-                                                                             .successful()
-                                                                             .authorizationHeader();
+                var authorizationHeader = userCreator(authUrl).create()
+                                                              .successful()
+                                                              .authenticate()
+                                                              .successful()
+                                                              .authorizationHeader();
                 postCreator(postUrl, authorizationHeader).create(40, index-> new CreatePostRequest(postNaming.apply(index)))
                                                          .map(PostCreated::response)
                                                          .allMatch(resp -> resp.statusCode() == 201);
@@ -142,11 +142,11 @@ class PostTest {
         @Test
         @DisplayName("Delete Post")
         void deletePostTest() {
-                var authorizationHeader = userCreator(userUrl, loginUrl).create()
-                                                                             .successful()
-                                                                             .authenticate()
-                                                                             .successful()
-                                                                             .authorizationHeader();
+                var authorizationHeader = userCreator(authUrl).create()
+                                                              .successful()
+                                                              .authenticate()
+                                                              .successful()
+                                                              .authorizationHeader();
                 var uuid = randomUUID().toString();
                 var createResponse = postCreator(postUrl, authorizationHeader).create(new CreatePostRequest("POST-" + uuid))
                                                                               .response();
@@ -162,11 +162,11 @@ class PostTest {
         @Test
         @DisplayName("Access Post")
         void accessPostTest() {
-                var authorizationHeader = userCreator(userUrl, loginUrl).create()
-                                                                             .successful()
-                                                                             .authenticate()
-                                                                             .successful()
-                                                                             .authorizationHeader();
+                var authorizationHeader = userCreator(authUrl).create()
+                                                              .successful()
+                                                              .authenticate()
+                                                              .successful()
+                                                              .authorizationHeader();
                 var uuid = randomUUID().toString();
                 var createResponse = postCreator(postUrl, authorizationHeader).create(new CreatePostRequest("POST-" + uuid))
                                                                               .response();

@@ -22,19 +22,17 @@ public class UserActions {
     }
 
     public static class UserCreator {
-        private final URL userUrl;
-        private final URL loginUrl;
+        private final URL authUrl;
 
-        private UserCreator(final URL userUrl, final URL loginUrl) {
-            this.userUrl = userUrl;
-            this.loginUrl = loginUrl;
+        private UserCreator(final URL authUrl) {
+            this.authUrl = authUrl;
         }
 
         public UserCreated create(final UserInfo user) {
             logger.info("Trying to create user... info={}", user);
-            return new UserCreated(loginUrl, user, given().contentType(ContentType.JSON)
+            return new UserCreated(authUrl, user, given().contentType(ContentType.JSON)
                     .body(new CreateUserRequest(user.handle(), user.email(), user.password()))
-                    .post(userUrl)
+                    .post(authUrl + "/register")
                     .then());
         }
 
@@ -48,11 +46,11 @@ public class UserActions {
     }
 
     public static class GivenCredentials implements Authenticator {
-        private final URL loginUrl;
+        private final URL authUrl;
         private final UserInfo userInfo;
 
-        private GivenCredentials(final URL loginUrl, final UserInfo userInfo) {
-            this.loginUrl = loginUrl;
+        private GivenCredentials(final URL authUrl, final UserInfo userInfo) {
+            this.authUrl = authUrl;
             this.userInfo = userInfo;
         }
 
@@ -61,19 +59,19 @@ public class UserActions {
             logger.info("Trying to authenticate user... info={}", userInfo);
             return new AuthenticatedUserResponse(given().contentType(ContentType.JSON)
                     .body(new Credentials(userInfo.handle(), userInfo.password()))
-                    .post(loginUrl)
+                    .post(authUrl + "/login")
                     .then());
         }
 
     }
 
     public static class UserCreated implements Authenticator {
-        private final URL loginUrl;
+        private final URL authUrl;
         private final UserInfo userInfo;
         private final ValidatableResponse httpResponse;
 
-        public UserCreated(final URL loginUrl, final UserInfo userInfo, final ValidatableResponse httpResponse) {
-            this.loginUrl = loginUrl;
+        public UserCreated(final URL authUrl, final UserInfo userInfo, final ValidatableResponse httpResponse) {
+            this.authUrl = authUrl;
             this.userInfo = userInfo;
             this.httpResponse = httpResponse;
         }
@@ -88,7 +86,7 @@ public class UserActions {
             logger.info("Trying to authenticate user... info={}", userInfo);
             return new AuthenticatedUserResponse(given().contentType(ContentType.JSON)
                     .body(new Credentials(userInfo.handle(), userInfo.password()))
-                    .post(loginUrl)
+                    .post(authUrl+"/login")
                     .then());
         }
 
@@ -118,7 +116,7 @@ public class UserActions {
 
         public String jwtToken() {
             return this.httpResponse.extract()
-                    .asString();
+                    .as(LoginResponse.class).accessToken();
         }
 
         public Header authorizationHeader() {
@@ -179,17 +177,17 @@ public class UserActions {
 
     public static final String DEFAULT_PASSWORD = "123456";
 
-    public static UserCreator userCreator(final URL userUrl, final URL loginUrl) {
-        return new UserCreator(userUrl, loginUrl);
+    public static UserCreator userCreator(final URL authUrl) {
+        return new UserCreator(authUrl);
     }
 
-    public static Authenticator givenAuthenticator(final URL loginUrl) {
-        return givenAuthenticator(loginUrl, new UserInfo(DEFAULT_HANDLE, DEFAULT_EMAIL, DEFAULT_PASSWORD));
+    public static Authenticator givenAuthenticator(final URL authUrl) {
+        return givenAuthenticator(authUrl, new UserInfo(DEFAULT_HANDLE, DEFAULT_EMAIL, DEFAULT_PASSWORD));
     }
 
 
-    public static Authenticator givenAuthenticator(final URL loginUrl, final UserInfo userInfo) {
-        return new GivenCredentials(loginUrl, userInfo);
+    public static Authenticator givenAuthenticator(final URL authUrl, final UserInfo userInfo) {
+        return new GivenCredentials(authUrl, userInfo);
     }
 
     public static UserInfo withUserInfo(final String handle, final String email, final String password) {

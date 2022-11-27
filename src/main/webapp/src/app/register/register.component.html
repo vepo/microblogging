@@ -1,52 +1,58 @@
-<div class="col-md-12">
-    <div class="card card-container">
-        <img id="profile-img" src="//ssl.gstatic.com/accounts/ui/avatar_2x.png" class="profile-img-card" />
-        <form *ngIf="!isSuccessful" name="form" (ngSubmit)="f.form.valid && onSubmit()" #f="ngForm" novalidate [formGroup]="registerForm">
-            <div class="form-group">
-                <label for="handle">Handle</label>
-                <input type="text" class="form-control" name="handle" formControlName="handle" required minlength="3" maxlength="20" />
-                <div class="alert-danger" *ngIf="handle.errors && !handle.pristine">
-                    <div *ngIf="handle.errors?.required">Handle is required</div>
-                    <div *ngIf="handle.errors?.minlength">
-                        Handle must be at least 3 characters
-                    </div>
-                    <div *ngIf="handle.errors?.maxlength">
-                        Handle must be at most 20 characters
-                    </div>
-                </div>
-            </div>
-            <div class="form-group">
-                <label for="email">Email</label>
-                <input type="email" class="form-control" name="email" formControlName="email" required email/>
-                <div class="alert-danger" *ngIf="email.errors && !email.pristine">
-                    <div *ngIf="email.errors?.required">Email is required</div>
-                    <div *ngIf="email.errors?.email">
-                        Email must be a valid email address
-                    </div>
-                </div>
-            </div>
-            <div class="form-group">
-                <label for="password">Password</label>
-                <input type="password" class="form-control" name="password" formControlName="password" required
-                    minlength="6" />
-                <div class="alert-danger" *ngIf="password.errors && !password.pristine">
-                    <div *ngIf="password.errors.required">Password is required</div>
-                    <div *ngIf="password.errors.minlength">
-                        Password must be at least 6 characters
-                    </div>
-                </div>
-            </div>
-            <div class="form-group">
-                <button class="btn btn-primary btn-block" [disabled]="!f.valid">Sign Up</button>
-            </div>
+<section class="gradient-custom">
+    <div class="container py-5">
+        <div class="row d-flex justify-content-center align-items-center">
+            <div class="col-12 col-md-8 col-lg-6 col-xl-6">
+                <div class="row d-flex justify-content-center">
+                    <div class="card bg-dark text-white" style="border-radius: 1rem;">
+                        <div class="card-body p-5 text-center">
+                            <div class="mb-md-5 mt-md-4 pb-5">
+                                <form *ngIf="!isSuccessful" name="form" (ngSubmit)="f.form.valid && onSubmit()" #f="ngForm" novalidate [formGroup]="registerForm">
 
-            <div class="alert alert-warning" *ngIf="f.submitted && isSignUpFailed">
-                Signup failed!<br />{{ errorMessage }}
-            </div>
-        </form>
+                                    <h2 class="fw-bold mb-2 text-uppercase">Register</h2>
+                                    <p class="text-white-50 mb-5">Choose a handle and fill with your email and password!</p>
 
-        <div class="alert alert-success" *ngIf="isSuccessful">
-            Your registration is successful!
+                                    <div class="form-white mb-4 text-start">
+                                        <label for="handle" class="form-label">Handle</label>
+                                        <input type="text" class="form-control" id="handle" formControlName="handle" required minlength="3" maxlength="20" />
+                                        <div class="alert-danger" *ngIf="handle && handle.errors && !handle.pristine">
+                                            <div *ngIf="handle && handle.errors && handle.errors['required']">Handle is required</div>
+                                            <div *ngIf="handle && handle.errors && handle.errors['minlength']">Handle must be at least 3 characters</div>
+                                            <div *ngIf="handle && handle.errors && handle.errors['maxlength']">Handle must be at most 20 characters</div>
+                                        </div>
+                                    </div>
+                                    <div class="form-white mb-4 text-start">
+                                        <label for="email" class="form-label">Email</label>
+                                        <input type="email" class="form-control" name="email" formControlName="email" required email />
+                                        <div class="alert-danger" *ngIf="email && email.errors && !email.pristine">
+                                            <div *ngIf="email && email.errors && email.errors['required']">Email is required</div>
+                                            <div *ngIf="email && email.errors && email.errors['email']">Email must be a valid email address</div>
+                                        </div>
+                                    </div>
+                                    <div class="form-white mb-4 text-start">
+                                        <label for="password" class="form-label">Password</label>
+                                        <input type="password" class="form-control" name="password" formControlName="password" required minlength="6" />
+                                        <div class="alert-danger" *ngIf="password && password.errors && !password.pristine">
+                                            <div *ngIf="password && password.errors && password.errors['required']">Password is required</div>
+                                            <div *ngIf="password && password.errors && password.errors['minlength']">Password must be at least 6 characters</div>
+                                        </div>
+                                    </div>
+                                    <div class="d-grid gap-2">
+                                        <button class="btn btn-primary" [disabled]="!f.valid">Register</button>
+                                    </div>
+
+                                    <div class="alert alert-warning" *ngIf="f.submitted && isSignUpFailed">Signup failed!<br />{{ errorMessage }}</div>
+                                </form>
+
+                                <div class="alert alert-success" *ngIf="isSuccessful">Your registration is successful!</div>
+                                
+                                <div class="d-grid gap-2" *ngIf="isSuccessful">
+                                    <button class="btn btn-primary">Login</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
-</div>
+</section>

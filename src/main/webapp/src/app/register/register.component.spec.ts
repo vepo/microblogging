@@ -32,12 +32,12 @@ describe('RegisterComponent', () => {
     const compile = fixture.nativeElement as HTMLElement;
     expect((compile.querySelector('button.btn-primary') as HTMLButtonElement).disabled).toBeTruthy();
 
-    (compile.querySelector('[name="handle"]') as HTMLInputElement).value = 'user-1';
-    (compile.querySelector('[name="handle"]') as HTMLInputElement).dispatchEvent(new Event('input'));
-    (compile.querySelector('[name="password"]') as HTMLInputElement).value = '123456';
-    (compile.querySelector('[name="password"]') as HTMLInputElement).dispatchEvent(new Event('input'));
-    (compile.querySelector('[name="email"]') as HTMLInputElement).value = 'user@microblogging.com';
-    (compile.querySelector('[name="email"]') as HTMLInputElement).dispatchEvent(new Event('input'));
+    (compile.querySelector('[id="handle"]') as HTMLInputElement).value = 'user-1';
+    (compile.querySelector('[id="handle"]') as HTMLInputElement).dispatchEvent(new Event('input'));
+    (compile.querySelector('[id="password"]') as HTMLInputElement).value = '123456';
+    (compile.querySelector('[id="password"]') as HTMLInputElement).dispatchEvent(new Event('input'));
+    (compile.querySelector('[id="email"]') as HTMLInputElement).value = 'user@microblogging.com';
+    (compile.querySelector('[id="email"]') as HTMLInputElement).dispatchEvent(new Event('input'));
     fixture.detectChanges();
     await fixture.whenStable();
     expect((compile.querySelector('button.btn-primary') as HTMLButtonElement).disabled).toBeFalsy();
@@ -47,28 +47,28 @@ describe('RegisterComponent', () => {
     await fixture.whenStable();
     const compile = fixture.nativeElement as HTMLElement;
     // valid values
-    (compile.querySelector('[name="password"]') as HTMLInputElement).value = '123456';
-    (compile.querySelector('[name="password"]') as HTMLInputElement).dispatchEvent(new Event('input'));
-    (compile.querySelector('[name="email"]') as HTMLInputElement).value = 'user@microblogging.com';
-    (compile.querySelector('[name="email"]') as HTMLInputElement).dispatchEvent(new Event('input'));
+    (compile.querySelector('[id="password"]') as HTMLInputElement).value = '123456';
+    (compile.querySelector('[id="password"]') as HTMLInputElement).dispatchEvent(new Event('input'));
+    (compile.querySelector('[id="email"]') as HTMLInputElement).value = 'user@microblogging.com';
+    (compile.querySelector('[id="email"]') as HTMLInputElement).dispatchEvent(new Event('input'));
 
     // invalid values
-    (compile.querySelector('[name="handle"]') as HTMLInputElement).value = '';
-    (compile.querySelector('[name="handle"]') as HTMLInputElement).dispatchEvent(new Event('input'))
+    (compile.querySelector('[id="handle"]') as HTMLInputElement).value = '';
+    (compile.querySelector('[id="handle"]') as HTMLInputElement).dispatchEvent(new Event('input'))
     fixture.detectChanges();
     await fixture.whenStable();
     expect(compile.querySelector('.alert-danger')?.textContent?.trim()).toBe('Handle is required');
     expect((compile.querySelector('button.btn-primary') as HTMLButtonElement).disabled).toBeTruthy();
 
-    (compile.querySelector('[name="handle"]') as HTMLInputElement).value = 'usr';
-    (compile.querySelector('[name="handle"]') as HTMLInputElement).dispatchEvent(new Event('input'));
+    (compile.querySelector('[id="handle"]') as HTMLInputElement).value = 'usr';
+    (compile.querySelector('[id="handle"]') as HTMLInputElement).dispatchEvent(new Event('input'));
     fixture.detectChanges();
     await fixture.whenStable();
     expect(compile.querySelector('.alert-danger')?.textContent?.trim()).toBe('Handle must be at least 3 characters');
     expect((compile.querySelector('button.btn-primary') as HTMLButtonElement).disabled).toBeTruthy();
 
-    (compile.querySelector('[name="handle"]') as HTMLInputElement).value = 'handle-21-chars-aaaaa';
-    (compile.querySelector('[name="handle"]') as HTMLInputElement).dispatchEvent(new Event('input'));
+    (compile.querySelector('[id="handle"]') as HTMLInputElement).value = 'handle-21-chars-aaaaa';
+    (compile.querySelector('[id="handle"]') as HTMLInputElement).dispatchEvent(new Event('input'));
     fixture.detectChanges();
     await fixture.whenStable();
     expect(compile.querySelector('.alert-danger')?.textContent?.trim()).toBe('Handle must be at most 20 characters');
@@ -79,21 +79,21 @@ describe('RegisterComponent', () => {
     await fixture.whenStable();
     const compile = fixture.nativeElement as HTMLElement;
     // valid values
-    (compile.querySelector('[name="password"]') as HTMLInputElement).value = '123456';
-    (compile.querySelector('[name="password"]') as HTMLInputElement).dispatchEvent(new Event('input'));
-    (compile.querySelector('[name="handle"]') as HTMLInputElement).value = 'user-1';
-    (compile.querySelector('[name="handle"]') as HTMLInputElement).dispatchEvent(new Event('input'));
+    (compile.querySelector('[id="password"]') as HTMLInputElement).value = '123456';
+    (compile.querySelector('[id="password"]') as HTMLInputElement).dispatchEvent(new Event('input'));
+    (compile.querySelector('[id="handle"]') as HTMLInputElement).value = 'user-1';
+    (compile.querySelector('[id="handle"]') as HTMLInputElement).dispatchEvent(new Event('input'));
 
     // invalid values
-    (compile.querySelector('[name="email"]') as HTMLInputElement).value = '';
-    (compile.querySelector('[name="email"]') as HTMLInputElement).dispatchEvent(new Event('input'))
+    (compile.querySelector('[id="email"]') as HTMLInputElement).value = '';
+    (compile.querySelector('[id="email"]') as HTMLInputElement).dispatchEvent(new Event('input'))
     fixture.detectChanges();
     await fixture.whenStable();
     expect(compile.querySelector('.alert-danger')?.textContent?.trim()).toBe('Email is required');
     expect((compile.querySelector('button.btn-primary') as HTMLButtonElement).disabled).toBeTruthy();
 
-    (compile.querySelector('[name="email"]') as HTMLInputElement).value = 'invalid-email';
-    (compile.querySelector('[name="email"]') as HTMLInputElement).dispatchEvent(new Event('input'));
+    (compile.querySelector('[id="email"]') as HTMLInputElement).value = 'invalid-email';
+    (compile.querySelector('[id="email"]') as HTMLInputElement).dispatchEvent(new Event('input'));
     fixture.detectChanges();
     await fixture.whenStable();
     expect(compile.querySelector('.alert-danger')?.textContent?.trim()).toBe('Email must be a valid email address');
@@ -104,21 +104,21 @@ describe('RegisterComponent', () => {
     await fixture.whenStable();
     const compile = fixture.nativeElement as HTMLElement;
     // valid values
-    (compile.querySelector('[name="password"]') as HTMLInputElement).value = '123456';
-    (compile.querySelector('[name="password"]') as HTMLInputElement).dispatchEvent(new Event('input'));
-    (compile.querySelector('[name="email"]') as HTMLInputElement).value = 'user@microblogging.com';
-    (compile.querySelector('[name="email"]') as HTMLInputElement).dispatchEvent(new Event('input'));
+    (compile.querySelector('[id="password"]') as HTMLInputElement).value = '123456';
+    (compile.querySelector('[id="password"]') as HTMLInputElement).dispatchEvent(new Event('input'));
+    (compile.querySelector('[id="email"]') as HTMLInputElement).value = 'user@microblogging.com';
+    (compile.querySelector('[id="email"]') as HTMLInputElement).dispatchEvent(new Event('input'));
 
     // invalid values
-    (compile.querySelector('[name="password"]') as HTMLInputElement).value = '';
-    (compile.querySelector('[name="password"]') as HTMLInputElement).dispatchEvent(new Event('input'))
+    (compile.querySelector('[id="password"]') as HTMLInputElement).value = '';
+    (compile.querySelector('[id="password"]') as HTMLInputElement).dispatchEvent(new Event('input'))
     fixture.detectChanges();
     await fixture.whenStable();
     expect(compile.querySelector('.alert-danger')?.textContent?.trim()).toBe('Password is required');
     expect((compile.querySelector('button.btn-primary') as HTMLButtonElement).disabled).toBeTruthy();
 
-    (compile.querySelector('[name="password"]') as HTMLInputElement).value = 'pwd';
-    (compile.querySelector('[name="password"]') as HTMLInputElement).dispatchEvent(new Event('input'));
+    (compile.querySelector('[id="password"]') as HTMLInputElement).value = 'pwd';
+    (compile.querySelector('[id="password"]') as HTMLInputElement).dispatchEvent(new Event('input'));
     fixture.detectChanges();
     await fixture.whenStable();
     expect(compile.querySelector('.alert-danger')?.textContent?.trim()).toBe('Password must be at least 6 characters');
@@ -138,12 +138,12 @@ describe('RegisterComponent', () => {
     };
     spyOn(authService, 'register').withArgs({ handle: 'user', email: 'user@microblogging.com', password: '123456' }).and.returnValue(of(registeredUser));
 
-    (compile.querySelector('[name="password"]') as HTMLInputElement).value = '123456';
-    (compile.querySelector('[name="password"]') as HTMLInputElement).dispatchEvent(new Event('input'));
-    (compile.querySelector('[name="email"]') as HTMLInputElement).value = 'user@microblogging.com';
-    (compile.querySelector('[name="email"]') as HTMLInputElement).dispatchEvent(new Event('input'));
-    (compile.querySelector('[name="handle"]') as HTMLInputElement).value = 'user';
-    (compile.querySelector('[name="handle"]') as HTMLInputElement).dispatchEvent(new Event('input'))
+    (compile.querySelector('[id="password"]') as HTMLInputElement).value = '123456';
+    (compile.querySelector('[id="password"]') as HTMLInputElement).dispatchEvent(new Event('input'));
+    (compile.querySelector('[id="email"]') as HTMLInputElement).value = 'user@microblogging.com';
+    (compile.querySelector('[id="email"]') as HTMLInputElement).dispatchEvent(new Event('input'));
+    (compile.querySelector('[id="handle"]') as HTMLInputElement).value = 'user';
+    (compile.querySelector('[id="handle"]') as HTMLInputElement).dispatchEvent(new Event('input'))
 
     fixture.detectChanges();
     await fixture.whenStable();

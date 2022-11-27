@@ -4,6 +4,13 @@ export interface User {
     roles: string[]
 }
 
+export interface LoginResponse {
+    id: number,
+    handle: string,
+    email: string,
+    accessToken: string
+}
+
 export interface Credentials {
     handle: string,
     password: string
