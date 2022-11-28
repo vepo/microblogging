@@ -1,23 +1,18 @@
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { AppComponent } from './app.component';
 import { TokenStorageService } from './_services/token-storage.service';
-
-let windowMock = {
-  location: { reload: () => { } },
-};
 
 describe('AppComponent', () => {
   let tokeService: TokenStorageService;
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [
-        RouterTestingModule
+        RouterTestingModule, HttpClientTestingModule
       ],
       declarations: [
         AppComponent
-      ], providers: [
-        { provide: Window, useFactory: (() => { return windowMock; }) }
       ]
     }).compileComponents();
     tokeService = TestBed.inject(TokenStorageService);
@@ -51,10 +46,41 @@ describe('AppComponent', () => {
     await fixture.whenStable();
     expect(app.title).toEqual('MicroBlogging');
 
-    spyOn(windowMock.location, 'reload').and.callFake(() => { });
-
     const compiled = fixture.nativeElement as HTMLElement;
     (compiled.querySelector('a[logout]') as HTMLElement)?.click();
+  });
+
+  it('should switch from login/logout', async () => {
+    tokeService.saveToken('ABCDEF');
+    tokeService.saveUser({
+      id: 1,
+      handle: 'john-doe',
+      roles: []
+    });
+    const fixture = TestBed.createComponent(AppComponent);
+    const app = fixture.componentInstance;
+    fixture.detectChanges();
+    await fixture.whenStable();
+    expect(fixture.nativeElement.querySelector('[href="/register"]')).toBeNull();
+    expect(fixture.nativeElement.querySelector('[href="/login"]')).toBeNull();
+    expect(fixture.nativeElement.querySelector('[href="/profile"]')).toBeTruthy();
+    expect(fixture.nativeElement.querySelector('[href="/user"]')).toBeTruthy();
+
+    fixture.componentInstance.onLogin(null);
+    fixture.detectChanges();
+    await fixture.whenStable();
+    expect(fixture.nativeElement.querySelector('[href="/register"]')).toBeTruthy();
+    expect(fixture.nativeElement.querySelector('[href="/login"]')).toBeTruthy();
+    expect(fixture.nativeElement.querySelector('[href="/profile"]')).toBeNull();
+    expect(fixture.nativeElement.querySelector('[href="/user"]')).toBeNull();
+
+    fixture.componentInstance.onLogin({ id: 1, handle: 'user', email: 'user@microblogging.com', accessToken: 'AAAA' });
+    fixture.detectChanges();
+    await fixture.whenStable();
+    expect(fixture.nativeElement.querySelector('[href="/register"]')).toBeNull();
+    expect(fixture.nativeElement.querySelector('[href="/login"]')).toBeNull();
+    expect(fixture.nativeElement.querySelector('[href="/profile"]')).toBeTruthy();
+    expect(fixture.nativeElement.querySelector('[href="/user"]')).toBeTruthy();
 
   });
 });

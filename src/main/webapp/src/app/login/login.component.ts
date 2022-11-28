@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthService } from '../_services/auth.service';
 import { TokenStorageService } from '../_services/token-storage.service';
@@ -9,10 +10,10 @@ import { TokenStorageService } from '../_services/token-storage.service';
   styleUrls: ['./login.component.less']
 })
 export class LoginComponent implements OnInit {
-  form: any = {
-    username: null,
-    password: null
-  };
+  loginForm = new FormGroup({
+    username: new FormControl('', [Validators.required]),
+    password: new FormControl('', [Validators.required])
+  });
   isLoginFailed = false;
   errorMessage = '';
 
@@ -24,10 +25,16 @@ export class LoginComponent implements OnInit {
     }
   }
 
-  onSubmit(): void {
-    const { username, password } = this.form;
+  get username() {
+    return this.loginForm.get('username');
+  }
 
-    this.authService.login({ handle: username, password })
+  get password() {
+    return this.loginForm.get('password');
+  }
+
+  onSubmit(): void {
+    this.authService.login({ handle: this.username?.value!, password: this.password?.value! })
       .subscribe({
         next: data => {
           this.tokenStorage.saveToken(data.accessToken);

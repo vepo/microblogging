@@ -18,8 +18,7 @@ export class AppComponent implements OnInit, loginCallback {
 
 
   constructor(private tokenStorage: TokenStorageService,
-    private authService: AuthService,
-    @Inject(Window) private window: any) { }
+    private authService: AuthService) { }
 
 
   ngOnInit(): void {
@@ -38,18 +37,13 @@ export class AppComponent implements OnInit, loginCallback {
     this.authService.onLogin(this);
   }
 
-  onLogin(LoginResponse: LoginResponse): void {
+  onLogin(LoginResponse: LoginResponse | null): void {
     if (LoginResponse != null) {
-      this.isLoggedIn = event != null;
-      if (this.isLoggedIn) {
-        this.roles = [];
-        this.showAdminBoard = this.roles.includes('ROLE_ADMIN');
-        this.showModeratorBoard = this.roles.includes('ROLE_MODERATOR');
-
-        this.handle = LoginResponse.handle;
-      } else {
-        this.showModeratorBoard = this.showAdminBoard = false;
-      }
+      this.isLoggedIn = true;
+      this.roles = [];
+      this.showAdminBoard = this.roles.includes('ROLE_ADMIN');
+      this.showModeratorBoard = this.roles.includes('ROLE_MODERATOR');
+      this.handle = LoginResponse.handle;
     } else {
       this.isLoggedIn = false;
       this.showAdminBoard = false;

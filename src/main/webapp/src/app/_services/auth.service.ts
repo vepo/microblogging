@@ -11,7 +11,7 @@ const httpOptions = {
 };
 
 export interface loginCallback {
-  onLogin(LoginResponse: LoginResponse): void;
+  onLogin(LoginResponse: LoginResponse | null): void;
 }
 
 @Injectable({

@@ -6,35 +6,31 @@
                     <div class="card bg-dark text-white" style="border-radius: 1rem;">
                         <div class="card-body p-5 text-center">
                             <div class="mt-md-4 pb-5">
-                                <form name="form" (ngSubmit)="f.form.valid && onSubmit()" #f="ngForm" novalidate>
+                                <form name="form" (ngSubmit)="onSubmit()" [formGroup]="loginForm" novalidate>
                                     
                                     <h2 class="fw-bold mb-2 text-uppercase">Login</h2>
                                     <p class="text-white-50 mb-5">Please enter your login and password!</p>
 
                                     <div class="form-white mb-4">
                                         <label for="username" class="form-label">Username</label>
-                                        <input type="text" class="form-control form-control-lg" id="username" name="username" [(ngModel)]="form.username" required #username="ngModel" />
-                                        <div class="alert alert-danger" role="alert" *ngIf="username.errors && f.submitted">
+                                        <input type="text" class="form-control form-control-lg" id="username" formControlName="username" required />
+                                        <div class="alert alert-danger" role="alert" *ngIf="username && username.errors && !username.pristine">
                                             Username is required!
                                         </div>
                                     </div>
                                     <div class="form-white mb-4">
                                         <label for="password" class="form-label">Password</label>
-                                        <input type="password" class="form-control form-control-lg" id="password" name="password" [(ngModel)]="form.password" required minlength="6" #password="ngModel" />
-                                        <div class="alert alert-danger" role="alert" *ngIf="password.errors && f.submitted">
-                                            <div *ngIf="password.errors['required']">Password is required</div>
-                                            <div *ngIf="password.errors['minlength']">
-                                                Password must be at least 6 characters
-                                            </div>
+                                        <input type="password" class="form-control form-control-lg" id="password" formControlName="password" required minlength="6" />
+                                        <div class="alert alert-danger" role="alert" *ngIf="password && password.errors && !password.pristine">
+                                            <div *ngIf="password && password.errors && password.errors['required']">Password is required</div>
+                                            <div *ngIf="password && password.errors && password.errors['minlength']">Password must be at least 6 characters</div>
                                         </div>
                                     </div>
                                     <div class="d-grid gap-2">
-                                        <button class="btn btn-primary">
-                                            Login
-                                        </button>
+                                        <button class="btn btn-primary" [disabled]="!loginForm.valid">Login</button>
                                     </div>
                                     <div>
-                                        <div class="alert alert-danger" role="alert" *ngIf="f.submitted && isLoginFailed">
+                                        <div class="alert alert-danger" role="alert" *ngIf="loginForm.submitted && isLoginFailed">
                                             Login failed: {{ errorMessage }}
                                         </div>
                                     </div>
