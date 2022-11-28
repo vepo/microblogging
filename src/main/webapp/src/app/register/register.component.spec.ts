@@ -27,7 +27,7 @@ describe('RegisterComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should disable Sign Up Button when invalid form', async () => {
+  it('should disable Register Button when invalid form', async () => {
     await fixture.whenStable();
     const compile = fixture.nativeElement as HTMLElement;
     expect((compile.querySelector('button.btn-primary') as HTMLButtonElement).disabled).toBeTruthy();

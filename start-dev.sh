@@ -1,5 +1,6 @@
 #!/bin/bash
 sdk use java 19-open
+rm src/main/resources/META-INF/resources/publicKey.pem
 cd src/main/webapp/
 npm run watch > ../../../webapp-build.log 2> ../../../webapp-build.err.log &
 NPM_PID=$!

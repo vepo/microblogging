@@ -1,4 +1,6 @@
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, EventEmitter, Inject, Input, OnInit, Output } from '@angular/core';
+import { LoginResponse } from './_model/user.model';
+import { AuthService, loginCallback } from './_services/auth.service';
 import { TokenStorageService } from './_services/token-storage.service';
 
 @Component({
@@ -6,7 +8,7 @@ import { TokenStorageService } from './_services/token-storage.service';
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.less']
 })
-export class AppComponent implements OnInit {
+export class AppComponent implements OnInit, loginCallback {
   title = 'MicroBlogging';
   isLoggedIn = false;
   showAdminBoard = false;
@@ -14,7 +16,11 @@ export class AppComponent implements OnInit {
   roles: string[] = [];
   handle: string = "";
 
-  constructor(private tokenStorage: TokenStorageService, @Inject(Window) private window: any) { }
+
+  constructor(private tokenStorage: TokenStorageService,
+    private authService: AuthService,
+    @Inject(Window) private window: any) { }
+
 
   ngOnInit(): void {
     this.isLoggedIn = !!this.tokenStorage.getToken();
@@ -29,11 +35,31 @@ export class AppComponent implements OnInit {
         this.handle = user.handle;
       }
     }
+    this.authService.onLogin(this);
+  }
+
+  onLogin(LoginResponse: LoginResponse): void {
+    if (LoginResponse != null) {
+      this.isLoggedIn = event != null;
+      if (this.isLoggedIn) {
+        this.roles = [];
+        this.showAdminBoard = this.roles.includes('ROLE_ADMIN');
+        this.showModeratorBoard = this.roles.includes('ROLE_MODERATOR');
+
+        this.handle = LoginResponse.handle;
+      } else {
+        this.showModeratorBoard = this.showAdminBoard = false;
+      }
+    } else {
+      this.isLoggedIn = false;
+      this.showAdminBoard = false;
+      this.showModeratorBoard = false;
+    }
   }
 
   logout(): boolean {
     this.tokenStorage.signOut();
-    this.window.location.reload();
+    this.showModeratorBoard = this.showAdminBoard = this.isLoggedIn = false;
     return false;
   }
 }

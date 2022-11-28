@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { Observable } from 'rxjs';
 import { User } from '../_model/user.model';
 
 const TOKEN_KEY = 'auth-token';
@@ -8,19 +9,29 @@ const USER_KEY = 'auth-user';
   providedIn: 'root'
 })
 export class TokenStorageService {
+  tokenObservable: Observable<string>;
 
-  constructor() { }
+  constructor() {
+    this.tokenObservable = new Observable<string>();
+  }
 
   signOut() {
     window.sessionStorage.clear();
   }
+
+  public token(): Observable<string> {
+    return this.tokenObservable;
+  }
+
   public saveToken(token: string): void {
     window.sessionStorage.removeItem(TOKEN_KEY);
     window.sessionStorage.setItem(TOKEN_KEY, token);
   }
+
   public getToken(): string | null {
     return window.sessionStorage.getItem(TOKEN_KEY);
   }
+
   public saveUser(user: User): void {
     window.sessionStorage.removeItem(USER_KEY);
     window.sessionStorage.setItem(USER_KEY, JSON.stringify(user));
@@ -34,4 +45,9 @@ export class TokenStorageService {
       return null;
     }
   }
+
+  public isLoggedIn(): boolean {
+    return window.sessionStorage.getItem(TOKEN_KEY) != null;
+  }
+
 }
