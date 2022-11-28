@@ -36,7 +36,7 @@ describe('LoginComponent', () => {
     handleInput.value = 'user';
     handleInput.dispatchEvent(new Event('input'));
     var passwordInput = fixture.nativeElement.querySelector('#password') as HTMLInputElement;
-    passwordInput.value = '123456';
+    passwordInput.value = '123456'; //NOSONAR
     passwordInput.dispatchEvent(new Event('input'));
     fixture.autoDetectChanges()
     await fixture.whenStable();

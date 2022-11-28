@@ -34,7 +34,7 @@ describe('RegisterComponent', () => {
 
     (compile.querySelector('#handle') as HTMLInputElement).value = 'user-1';
     (compile.querySelector('#handle') as HTMLInputElement).dispatchEvent(new Event('input'));
-    (compile.querySelector('#password') as HTMLInputElement).value = '123456';
+    (compile.querySelector('#password') as HTMLInputElement).value = '123456'; //NOSONAR
     (compile.querySelector('#password') as HTMLInputElement).dispatchEvent(new Event('input'));
     (compile.querySelector('#email') as HTMLInputElement).value = 'user@microblogging.com';
     (compile.querySelector('#email') as HTMLInputElement).dispatchEvent(new Event('input'));
@@ -47,7 +47,7 @@ describe('RegisterComponent', () => {
     await fixture.whenStable();
     const compile = fixture.nativeElement as HTMLElement;
     // valid values
-    (compile.querySelector('#password') as HTMLInputElement).value = '123456';
+    (compile.querySelector('#password') as HTMLInputElement).value = '123456'; //NOSONAR
     (compile.querySelector('#password') as HTMLInputElement).dispatchEvent(new Event('input'));
     (compile.querySelector('#email') as HTMLInputElement).value = 'user@microblogging.com';
     (compile.querySelector('#email') as HTMLInputElement).dispatchEvent(new Event('input'));
@@ -79,7 +79,7 @@ describe('RegisterComponent', () => {
     await fixture.whenStable();
     const compile = fixture.nativeElement as HTMLElement;
     // valid values
-    (compile.querySelector('#password') as HTMLInputElement).value = '123456';
+    (compile.querySelector('#password') as HTMLInputElement).value = '123456'; //NOSONAR
     (compile.querySelector('#password') as HTMLInputElement).dispatchEvent(new Event('input'));
     (compile.querySelector('#handle') as HTMLInputElement).value = 'user-1';
     (compile.querySelector('#handle') as HTMLInputElement).dispatchEvent(new Event('input'));
@@ -104,7 +104,7 @@ describe('RegisterComponent', () => {
     await fixture.whenStable();
     const compile = fixture.nativeElement as HTMLElement;
     // valid values
-    (compile.querySelector('#password') as HTMLInputElement).value = '123456';
+    (compile.querySelector('#password') as HTMLInputElement).value = '123456'; //NOSONAR
     (compile.querySelector('#password') as HTMLInputElement).dispatchEvent(new Event('input'));
     (compile.querySelector('#email') as HTMLInputElement).value = 'user@microblogging.com';
     (compile.querySelector('#email') as HTMLInputElement).dispatchEvent(new Event('input'));
@@ -117,7 +117,7 @@ describe('RegisterComponent', () => {
     expect(compile.querySelector('.alert-danger')?.textContent?.trim()).toBe('Password is required');
     expect((compile.querySelector('button.btn-primary') as HTMLButtonElement).disabled).toBeTruthy();
 
-    (compile.querySelector('#password') as HTMLInputElement).value = 'pwd';
+    (compile.querySelector('#password') as HTMLInputElement).value = 'pwd'; //NOSONAR
     (compile.querySelector('#password') as HTMLInputElement).dispatchEvent(new Event('input'));
     fixture.detectChanges();
     await fixture.whenStable();
@@ -136,9 +136,10 @@ describe('RegisterComponent', () => {
       handle: "user",
       roles: []
     };
-    spyOn(authService, 'register').withArgs({ handle: 'user', email: 'user@microblogging.com', password: '123456' }).and.returnValue(of(registeredUser));
+    spyOn(authService, 'register').withArgs({ handle: 'user', email: 'user@microblogging.com', password: '123456' }) //NOSONAR
+                                  .and.returnValue(of(registeredUser));
 
-    (compile.querySelector('#password') as HTMLInputElement).value = '123456';
+    (compile.querySelector('#password') as HTMLInputElement).value = '123456'; //NOSONAR
     (compile.querySelector('#password') as HTMLInputElement).dispatchEvent(new Event('input'));
     (compile.querySelector('#email') as HTMLInputElement).value = 'user@microblogging.com';
     (compile.querySelector('#email') as HTMLInputElement).dispatchEvent(new Event('input'));
