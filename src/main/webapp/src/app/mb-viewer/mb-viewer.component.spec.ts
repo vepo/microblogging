@@ -4,8 +4,8 @@ import { RouterTestingModule } from "@angular/router/testing";
 
 import { ActivatedRoute, convertToParamMap, ParamMap } from '@angular/router';
 import { BehaviorSubject, of } from 'rxjs';
-import { PostService } from '../post.service';
-import { Post } from '../posts/posts.model';
+import { PostService } from '../_services/post.service';
+import { Post } from '../_model/posts.model';
 import { MbViewerComponent } from './mb-viewer.component';
 import { By } from "@angular/platform-browser";
 
@@ -55,9 +55,7 @@ describe('MbViewerComponent', () => {
     fixture.detectChanges();
     await fixture.whenStable();
     const compiled = fixture.nativeElement as HTMLElement;
-    console.log(fixture.nativeElement)
     const btnDelete = fixture.nativeElement.querySelector('.btn-delete');
-    console.log(btnDelete);
     btnDelete.click();
   });
 });

@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
-import { PostService } from '../post.service';
+import { PostService } from '../_services/post.service';
+
 
 @Component({
   selector: 'app-mb-editor',

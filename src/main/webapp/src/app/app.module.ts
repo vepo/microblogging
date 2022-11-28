@@ -1,13 +1,16 @@
-import { NgModule } from '@angular/core';
-import { BrowserModule } from '@angular/platform-browser';
 import { HttpClientModule } from '@angular/common/http';
+import { NgModule } from '@angular/core';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { BrowserModule } from '@angular/platform-browser';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
+import { HomeScreenComponent } from './home-screen/home-screen.component';
 import { MbEditorComponent } from './mb-editor/mb-editor.component';
 import { MbTimelineComponent } from './mb-timeline/mb-timeline.component';
 import { MbViewerComponent } from './mb-viewer/mb-viewer.component';
-import { HomeScreenComponent } from './home-screen/home-screen.component';
-import { FormsModule } from '@angular/forms';
+import { RegisterComponent } from './register/register.component';
+import { LoginComponent } from './login/login.component';
+import { ProfileComponent } from './profile/profile.component';
 
 @NgModule({
   declarations: [
@@ -15,15 +18,21 @@ import { FormsModule } from '@angular/forms';
     MbEditorComponent,
     MbTimelineComponent,
     MbViewerComponent,
-    HomeScreenComponent
+    HomeScreenComponent,
+    RegisterComponent,
+    LoginComponent,
+    ProfileComponent
   ],
   imports: [
     BrowserModule,
     FormsModule,
+    ReactiveFormsModule,
     HttpClientModule,
     AppRoutingModule
   ],
-  providers: [],
+  providers: [
+    { provide: Window, useValue: window }
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

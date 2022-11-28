@@ -1,0 +1,45 @@
+<section class="vh-100 gradient-custom">
+    <div class="container py-5 h-100">
+        <div class="row d-flex justify-content-center align-items-center h-100">
+            <div class="col-12 col-md-8 col-lg-6 col-xl-6">
+                <div class="row d-flex justify-content-center">
+                    <div class="card bg-dark text-white" style="border-radius: 1rem;">
+                        <div class="card-body p-5 text-center">
+                            <div class="mt-md-4 pb-5">
+                                <form name="form" (ngSubmit)="onSubmit()" [formGroup]="loginForm" novalidate>
+                                    
+                                    <h2 class="fw-bold mb-2 text-uppercase">Login</h2>
+                                    <p class="text-white-50 mb-5">Please enter your login and password!</p>
+
+                                    <div class="form-white mb-4">
+                                        <label for="handle" class="form-label">Handle</label>
+                                        <input type="text" class="form-control form-control-lg" id="handle" formControlName="handle" required />
+                                        <div class="alert alert-danger" role="alert" *ngIf="handle && handle.errors && !handle.pristine">
+                                            Username is required!
+                                        </div>
+                                    </div>
+                                    <div class="form-white mb-4">
+                                        <label for="password" class="form-label">Password</label>
+                                        <input type="password" class="form-control form-control-lg" id="password" formControlName="password" required minlength="6" />
+                                        <div class="alert alert-danger" role="alert" *ngIf="password && password.errors && !password.pristine">
+                                            <div *ngIf="password && password.errors && password.errors['required']">Password is required</div>
+                                            <div *ngIf="password && password.errors && password.errors['minlength']">Password must be at least 6 characters</div>
+                                        </div>
+                                    </div>
+                                    <div class="d-grid gap-2">
+                                        <button class="btn btn-primary" [disabled]="!loginForm.valid">Login</button>
+                                    </div>
+                                    <div>
+                                        <div class="alert alert-danger" role="alert" *ngIf="isLoginFailed">
+                                            Login failed: {{ errorMessage }}
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

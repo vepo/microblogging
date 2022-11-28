@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, ParamMap, Router } from '@angular/router';
 import { switchMap } from 'rxjs';
-import { PostService } from '../post.service';
-import { Post } from '../posts/posts.model';
+import { PostService } from '../_services/post.service';
+import { Post } from '../_model/posts.model';
 
 @Component({
   selector: 'app-mb-viewer',

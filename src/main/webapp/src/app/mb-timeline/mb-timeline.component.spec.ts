@@ -3,9 +3,9 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { RouterTestingModule } from '@angular/router/testing';
 import { of } from 'rxjs';
-import { PostService } from '../post.service';
-import { Page } from '../posts/page.model';
-import { Post } from '../posts/posts.model';
+import { PostService } from '../_services/post.service';
+import { Page } from '../_model/page.model';
+import { Post } from '../_model/posts.model';
 
 import { MbTimelineComponent } from './mb-timeline.component';
 

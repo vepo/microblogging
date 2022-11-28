@@ -24,27 +24,27 @@ import io.vepo.microblogging.infra.TestContainerPostgreResource;
 @QuarkusTest
 @DisplayName("Login")
 @QuarkusTestResource(value = TestContainerPostgreResource.class)
-public class LoginTest {
+public class AuthenticationResourceTest {
     @TestHTTPResource
     @TestHTTPEndpoint(UserEndpoint.class)
     URL userUrl;
 
     @TestHTTPResource
-    @TestHTTPEndpoint(LoginEndpoint.class)
-    URL loginUrl;
+    @TestHTTPEndpoint(AuthenticationResource.class)
+    URL authUrl;
 
     @Test
     @DisplayName("It should not allow login if the user doesn't exists")
     public void noUserLoginTest() {
-        var response = givenAuthenticator(loginUrl).authenticate().response();
+        var response = givenAuthenticator(authUrl).authenticate().response();
         assertEquals(Status.UNAUTHORIZED.getStatusCode(), response.statusCode(), "It should not authorize!");
     }
 
     @Test
     @DisplayName("It should not allow login if the user doesn't exists")
     public void wrongPasswordLoginTest() {
-        userCreator(userUrl, loginUrl).create().successful();
-        var response = givenAuthenticator(loginUrl, withUserInfo(DEFAULT_HANDLE, DEFAULT_EMAIL, DEFAULT_PASSWORD + 'X'))
+        userCreator(authUrl).create().successful();
+        var response = givenAuthenticator(authUrl, withUserInfo(DEFAULT_HANDLE, DEFAULT_EMAIL, DEFAULT_PASSWORD + 'X'))
                 .authenticate()
                 .response();
         assertEquals(Status.UNAUTHORIZED.getStatusCode(), response.statusCode(), "It should not authorize if the password is wrong!");

@@ -36,18 +36,6 @@ public class UserEndpoint {
     @Inject
     Posts posts;
 
-    @POST
-    @PermitAll
-    @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response create(CreateUserRequest request) throws URISyntaxException {
-        logger.info("Creating user: request={}", request);
-        var user = users.create(new User(request.handle(), request.email(), request.password()));
-        return Response.created(new URI(String.format("/post/%d", user.getId())))
-                .entity(user)
-                .build();
-    }
-
     @GET
     @Path("{userId: [0-9]+}")
     @PermitAll

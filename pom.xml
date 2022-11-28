@@ -75,7 +75,7 @@
       <artifactId>to-string-verifier</artifactId>
       <version>1.4.8</version>
       <scope>test</scope>
-  </dependency>
+    </dependency>
     <dependency>
       <groupId>io.quarkus</groupId>
       <artifactId>quarkus-junit5</artifactId>

@@ -1,6 +1,7 @@
 package io.vepo.microblogging.user;
 
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.Objects;
 
 import javax.persistence.Column;
@@ -41,7 +42,7 @@ public class User {
         this.handle = handle;
         this.email = email;
         this.hashedPassword = password;
-        this.createdAt = LocalDateTime.now();
+        this.createdAt = LocalDateTime.now().truncatedTo(ChronoUnit.MILLIS);
     }
 
     public Long getId() {
