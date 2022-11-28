@@ -11,7 +11,7 @@ import { TokenStorageService } from '../_services/token-storage.service';
 })
 export class LoginComponent implements OnInit {
   loginForm = new FormGroup({
-    username: new FormControl('', [Validators.required]),
+    handle: new FormControl('', [Validators.required]),
     password: new FormControl('', [Validators.required])
   });
   isLoginFailed = false;
@@ -25,8 +25,8 @@ export class LoginComponent implements OnInit {
     }
   }
 
-  get username() {
-    return this.loginForm.get('username');
+  get handle() {
+    return this.loginForm.get('handle');
   }
 
   get password() {
@@ -34,7 +34,7 @@ export class LoginComponent implements OnInit {
   }
 
   onSubmit(): void {
-    this.authService.login({ handle: this.username?.value!, password: this.password?.value! })
+    this.authService.login({ handle: this.handle?.value!, password: this.password?.value! })
       .subscribe({
         next: data => {
           this.tokenStorage.saveToken(data.accessToken);

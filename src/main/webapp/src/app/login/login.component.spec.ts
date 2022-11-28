@@ -32,9 +32,9 @@ describe('LoginComponent', () => {
     var loginButton = fixture.nativeElement.querySelector('.btn-primary') as HTMLButtonElement;
     expect(loginButton.disabled).toBeTruthy();
 
-    var usernameInput = fixture.nativeElement.querySelector('#username') as HTMLInputElement;
-    usernameInput.value = 'user';
-    usernameInput.dispatchEvent(new Event('input'));
+    var handleInput = fixture.nativeElement.querySelector('#handle') as HTMLInputElement;
+    handleInput.value = 'user';
+    handleInput.dispatchEvent(new Event('input'));
     var passwordInput = fixture.nativeElement.querySelector('#password') as HTMLInputElement;
     passwordInput.value = '123456';
     passwordInput.dispatchEvent(new Event('input'));

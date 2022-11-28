@@ -12,9 +12,9 @@
                                     <p class="text-white-50 mb-5">Please enter your login and password!</p>
 
                                     <div class="form-white mb-4">
-                                        <label for="username" class="form-label">Username</label>
-                                        <input type="text" class="form-control form-control-lg" id="username" formControlName="username" required />
-                                        <div class="alert alert-danger" role="alert" *ngIf="username && username.errors && !username.pristine">
+                                        <label for="handle" class="form-label">Handle</label>
+                                        <input type="text" class="form-control form-control-lg" id="handle" formControlName="handle" required />
+                                        <div class="alert alert-danger" role="alert" *ngIf="handle && handle.errors && !handle.pristine">
                                             Username is required!
                                         </div>
                                     </div>
@@ -30,7 +30,7 @@
                                         <button class="btn btn-primary" [disabled]="!loginForm.valid">Login</button>
                                     </div>
                                     <div>
-                                        <div class="alert alert-danger" role="alert" *ngIf="loginForm.submitted && isLoginFailed">
+                                        <div class="alert alert-danger" role="alert" *ngIf="isLoginFailed">
                                             Login failed: {{ errorMessage }}
                                         </div>
                                     </div>

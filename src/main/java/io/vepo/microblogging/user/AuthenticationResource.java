@@ -16,6 +16,7 @@ import javax.ws.rs.core.Response;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import io.vepo.microblogging.infra.ErrorInformation;
 import io.vepo.microblogging.infra.JwtUtils;
 
 @Path("/auth")
@@ -38,7 +39,7 @@ public class AuthenticationResource {
         return users.findByHandleAndPassword(credentials.handle(), credentials.password())
                 .map(user -> Response.ok(
                         new LoginResponse(user.getId(), user.getHandle(), user.getEmail(), jwtUtils.generate(user))))
-                .orElseGet(() -> Response.status(401))
+                .orElseGet(() -> Response.status(401).entity(new ErrorInformation("Credentials are not valid!")))
                 .build();
     }
 
