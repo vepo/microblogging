@@ -1,7 +1,7 @@
-<div class="editor-root">
+<div class="editor-root mx-2 my-4">
     <div>
         <div>
-            <textarea class="editor" [(ngModel)]="content"></textarea>
+            <textarea class="editor form-control" [(ngModel)]="content"></textarea>
         </div>
     </div>
     <div class="content-length">
@@ -9,7 +9,7 @@
     </div>
     <div>
         <div class="btns">
-            <button class="btn-create" (click)="create()" [disabled]="content.trim().length == 0">Post</button>
+            <button class="btn btn-primary" (click)="create()" [disabled]="content.trim().length == 0">Post</button>
         </div>
     </div>
 </div>

@@ -1,8 +1,20 @@
+.panel {
+    width: 100%;
+}
 .post {
-    background: #49306B;
-    color: #FFF;
-    padding: 1em;
-    margin: 0 0 0.7em 0;
+    background: #444444;
+    color: #FFFFFF;
+    border: solid 1px hsl(0, 0%, 13%);
+    border-top: none;
+
+    &:first-child {
+        border-top: solid 1px #222222;
+        border-radius: 5px 5px 0 0;
+    }
+
+    &:last-child {
+        border-radius: 0 0 5px 5px;
+    }
 
     .content {
         font-size: 1.2em;

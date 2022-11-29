@@ -29,7 +29,7 @@ public class Posts {
         CriteriaBuilder criteriaBuilder = em.getCriteriaBuilder();
         CriteriaQuery<Post> query = criteriaBuilder.createQuery(Post.class);
         var root = query.from(Post.class);
-        query.orderBy(criteriaBuilder.asc(root.get("createdAt")));
+        query.orderBy(criteriaBuilder.desc(root.get("createdAt")));
         return em.createQuery(query)
                  .setFirstResult(offset)
                  .setMaxResults(limit)
