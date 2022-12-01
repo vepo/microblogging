@@ -1,48 +1,34 @@
-package io.vepo.microblogging.post;
+package io.vepo.microblogging.user;
 
 import java.time.LocalDateTime;
-import java.time.temporal.ChronoUnit;
+import java.util.Base64;
 import java.util.Objects;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "tb_posts")
-@NamedQuery(name = "post-delete", query = "DELETE from Post where id = :id")
-public class Post {
+@Table(name = "tb_image")
+public class Image {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(nullable = false)
-    private String content;
+    @Enumerated(EnumType.STRING)
+    private ImageType type;
 
-    @Column(name="author_id", nullable = false)
-    private Long authorId;
+    @Column(nullable = false)
+    private byte[] data;
 
     @Column(name = "created_at", nullable = false)
     private LocalDateTime createdAt;
-
-    public Post() {
-        this(null, null, null);
-    }
-
-    public Post(Long authorId, String content) {
-        this(null, authorId, content);
-    }
-
-    public Post(Long id, Long authorId, String content) {
-        this.id = id;
-        this.authorId = authorId;
-        this.content = content;
-        this.createdAt = LocalDateTime.now().truncatedTo(ChronoUnit.MILLIS);
-    }
 
     public Long getId() {
         return id;
@@ -52,20 +38,20 @@ public class Post {
         this.id = id;
     }
 
-    public Long getAuthorId() {
-        return authorId;
+    public ImageType getType() {
+        return type;
     }
 
-    public void setAuthorId(Long authorId) {
-        this.authorId = authorId;
+    public void setType(ImageType type) {
+        this.type = type;
     }
 
-    public String getContent() {
-        return content;
+    public byte[] getData() {
+        return data;
     }
 
-    public void setContent(String content) {
-        this.content = content;
+    public void setData(byte[] data) {
+        this.data = data;
     }
 
     public LocalDateTime getCreatedAt() {
@@ -78,7 +64,7 @@ public class Post {
 
     @Override
     public int hashCode() {
-        return Objects.hash(id);
+        return Objects.hash(id, type, data);
     }
 
     @Override
@@ -90,12 +76,14 @@ public class Post {
         } else if (getClass() != obj.getClass()) {
             return false;
         }
-        Post other = (Post) obj;
+        Image other = (Image) obj;
         return Objects.equals(id, other.id);
     }
 
     @Override
     public String toString() {
-        return String.format("Post[id=%d, authorId=%d, content=%s, createdAt=%s]", id, authorId, content, createdAt);
+        return String.format("Image[id=%d, type=%s, data=%s createdAt=%s]",
+                id, type, Base64.getEncoder().encodeToString(data), createdAt);
     }
+
 }

@@ -1,4 +1,4 @@
-INSERT INTO tb_users (handle, email, hashed_password, created_at) VALUES ('admin', 'admin@microblogging.com', '1231313', NOW());
+INSERT INTO tb_users (handle, email, hashed_password, created_at) VALUES ('admin', 'admin@microblogging.com', 'NxH0Rmt/R0Hg07qYrN5TL3bhYGiXqOxknyEKUxZHhxw6F7gQbKgJV6C68ollCWjyQ35oIgFt9AhMNMFKjMcknA==', NOW());
 
 INSERT INTO tb_posts (author_id, content, created_at) VALUES (1, 'Estratégias em um Novo Paradigma Globalizado', NOW());
 INSERT INTO tb_posts (author_id, content, created_at) VALUES (1, 'Caros amigos, a execução dos pontos do programa nos obriga à análise do levantamento das variáveis envolvidas.', NOW());

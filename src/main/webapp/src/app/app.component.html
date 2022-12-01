@@ -1,6 +1,6 @@
 <div id="app">
     <nav class="navbar navbar-expand navbar-dark bg-dark px-3">
-        <a href="#" class="navbar-brand">{{title}}</a>
+        <a href="#" class="navbar-brand">{{ title }}</a>
         <ul class="navbar-nav me-auto" routerLinkActive="active">
             <li class="nav-item" *ngIf="showAdminBoard">
                 <a href="/admin" class="nav-link" routerLink="admin">Admin</a>
@@ -9,7 +9,7 @@
                 <a href="/mod" class="nav-link" routerLink="mode">Moderator</a>
             </li>
             <li class="nav-item">
-                <a href="/user" class="nav-link" *ngIf="isLoggedIn" routerLink="user">User</a>
+                <a href="/user" class="nav-link" *ngIf="isLoggedIn" [routerLink]="[handle]">User</a>
             </li>
         </ul>
 

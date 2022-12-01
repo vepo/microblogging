@@ -3,6 +3,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { HomeScreenComponent } from './home-screen/home-screen.component';
 import { LoginComponent } from './login/login.component';
 import { MbViewerComponent } from './mb-viewer/mb-viewer.component';
+import { ProfileComponent } from './profile/profile.component';
 import { RegisterComponent } from './register/register.component';
 
 const routes: Routes = [{
@@ -20,6 +21,10 @@ const routes: Routes = [{
 }, {
   path: 'post/:id/view',
   component: MbViewerComponent
+}, {
+  path: ':handle',
+  title: 'Profile',
+  component: ProfileComponent
 }];
 
 @NgModule({

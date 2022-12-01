@@ -1,5 +1,5 @@
 <div class="panel mx-2 my-4">
-    <div *ngFor="let post of posts | orderBy: 'createdAt'" class="post px-4 py-2" [routerLink]="['post', post.id, 'view']">
+    <div *ngFor="let post of posts" class="post px-4 py-2" [routerLink]="['post', post.id, 'view']">
         <div class="content">
             {{ post.content }}
         </div>

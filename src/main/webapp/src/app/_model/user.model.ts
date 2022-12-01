@@ -1,3 +1,18 @@
+export interface Profile {
+    id: number;
+    handle: string;
+    images: ProfileImages;
+}
+
+export interface ProfileImages {
+    cover: Image;
+    avatar: Image;
+}
+
+export interface Image {
+    url: string;
+}
+
 export interface User {
     id: number,
     handle: string,

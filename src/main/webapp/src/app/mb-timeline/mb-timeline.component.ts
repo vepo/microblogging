@@ -1,4 +1,4 @@
-import { Component, HostListener, OnInit } from '@angular/core';
+import { Component, HostListener, Input, OnInit } from '@angular/core';
 import { PostService } from '../_services/post.service';
 import { Post } from '../_model/posts.model';
 
@@ -8,6 +8,8 @@ import { Post } from '../_model/posts.model';
   styleUrls: ['./mb-timeline.component.less']
 })
 export class MbTimelineComponent implements OnInit {
+  @Input() kind = '';
+  @Input() userId: number | null = null
   posts: Post[] = [];
   hasMore: boolean = true;
   loadingItems: boolean = false;

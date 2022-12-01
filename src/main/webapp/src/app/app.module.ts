@@ -12,6 +12,7 @@ import { RegisterComponent } from './register/register.component';
 import { LoginComponent } from './login/login.component';
 import { ProfileComponent } from './profile/profile.component';
 import { AuthInterceptor } from './_infra/auth.interceptor';
+import { ProfileHeaderComponent } from './profile-header/profile-header.component';
 
 @NgModule({
   declarations: [
@@ -22,7 +23,8 @@ import { AuthInterceptor } from './_infra/auth.interceptor';
     HomeScreenComponent,
     RegisterComponent,
     LoginComponent,
-    ProfileComponent
+    ProfileComponent,
+    ProfileHeaderComponent
   ],
   imports: [
     BrowserModule,
