@@ -1,4 +1,4 @@
-package io.vepo.microblogging.user;
+package io.vepo.microblogging.auth;
 
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -18,6 +18,10 @@ import org.slf4j.LoggerFactory;
 
 import io.vepo.microblogging.infra.ErrorInformation;
 import io.vepo.microblogging.infra.JwtUtils;
+import io.vepo.microblogging.user.CreateUserRequest;
+import io.vepo.microblogging.user.Credentials;
+import io.vepo.microblogging.user.User;
+import io.vepo.microblogging.user.Users;
 
 @Path("/auth")
 @ApplicationScoped

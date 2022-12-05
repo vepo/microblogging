@@ -1,1 +1,9 @@
-<p>profile-header works!</p>
+<div class="root">
+    <img *ngIf="profile && profile.images && profile.images.cover && profile.images.cover.url"
+        [src]="profile!.images!.cover!.url" class="img-fluid" />
+    <img *ngIf="!profile || !profile.images || !profile.images.cover || !profile.images.cover.url"
+        src="https://picsum.photos/960/250" width="960px" height="250px" class="img-fluid" />
+    <button type="button" class="edit-cover btn btn-light">
+        <fa-icon [icon]="faImage"></fa-icon>
+    </button>
+</div>

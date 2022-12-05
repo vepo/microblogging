@@ -2,6 +2,7 @@ export interface Profile {
     id: number;
     handle: string;
     images: ProfileImages;
+    createdAt: Date;
 }
 
 export interface ProfileImages {

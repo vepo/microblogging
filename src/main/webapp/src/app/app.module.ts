@@ -13,6 +13,9 @@ import { LoginComponent } from './login/login.component';
 import { ProfileComponent } from './profile/profile.component';
 import { AuthInterceptor } from './_infra/auth.interceptor';
 import { ProfileHeaderComponent } from './profile-header/profile-header.component';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { ProfileAvatarComponent } from './profile-avatar/profile-avatar.component';
+import { ProfileInfoComponent } from './profile-info/profile-info.component';
 
 @NgModule({
   declarations: [
@@ -24,14 +27,17 @@ import { ProfileHeaderComponent } from './profile-header/profile-header.componen
     RegisterComponent,
     LoginComponent,
     ProfileComponent,
-    ProfileHeaderComponent
+    ProfileHeaderComponent,
+    ProfileAvatarComponent,
+    ProfileInfoComponent
   ],
   imports: [
     BrowserModule,
     FormsModule,
     ReactiveFormsModule,
     HttpClientModule,
-    AppRoutingModule
+    AppRoutingModule,
+    FontAwesomeModule
   ],
   providers: [
     { provide: Window, useValue: window },

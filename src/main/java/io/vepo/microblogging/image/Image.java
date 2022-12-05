@@ -1,6 +1,7 @@
-package io.vepo.microblogging.user;
+package io.vepo.microblogging.image;
 
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.Base64;
 import java.util.Objects;
 
@@ -11,7 +12,10 @@ import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Lob;
 import javax.persistence.Table;
+
+import org.hibernate.annotations.Type;
 
 @Entity
 @Table(name = "tb_image")
@@ -25,10 +29,27 @@ public class Image {
     private ImageType type;
 
     @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
+    private ImageFormat format;
+
+    @Lob
+    @Type(type = "org.hibernate.type.BinaryType")
+    @Column(nullable = false)
     private byte[] data;
 
     @Column(name = "created_at", nullable = false)
     private LocalDateTime createdAt;
+
+    public Image() {
+        this(null, null, null);
+    }
+
+    public Image(ImageType type, ImageFormat format, byte[] data) {
+        this.type = type;
+        this.format = format;
+        this.data = data;
+        this.createdAt = LocalDateTime.now().truncatedTo(ChronoUnit.MILLIS);
+    }
 
     public Long getId() {
         return id;
@@ -44,6 +65,14 @@ public class Image {
 
     public void setType(ImageType type) {
         this.type = type;
+    }
+
+    public ImageFormat getFormat() {
+        return format;
+    }
+
+    public void setFormat(ImageFormat format) {
+        this.format = format;
     }
 
     public byte[] getData() {
@@ -82,8 +111,8 @@ public class Image {
 
     @Override
     public String toString() {
-        return String.format("Image[id=%d, type=%s, data=%s createdAt=%s]",
-                id, type, Base64.getEncoder().encodeToString(data), createdAt);
+        return String.format("Image[id=%d, type=%s, format=%s, data=%s createdAt=%s]",
+                id, type, format, Base64.getEncoder().encodeToString(data), createdAt);
     }
 
 }

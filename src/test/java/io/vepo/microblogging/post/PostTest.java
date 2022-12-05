@@ -18,10 +18,12 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.Collections;
 import java.util.function.IntFunction;
 
 import javax.ws.rs.core.Response.Status;
 
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
 import org.junit.jupiter.api.Test;
@@ -31,10 +33,10 @@ import io.quarkus.test.common.QuarkusTestResource;
 import io.quarkus.test.common.http.TestHTTPEndpoint;
 import io.quarkus.test.common.http.TestHTTPResource;
 import io.quarkus.test.junit.QuarkusTest;
+import io.vepo.microblogging.auth.AuthenticationResource;
 import io.vepo.microblogging.infra.TestContainerPostgreResource;
 import io.vepo.microblogging.post.PostActions.PostCreated;
-import io.vepo.microblogging.user.AuthenticationResource;
-import io.vepo.microblogging.user.UserEndpoint;
+import io.vepo.microblogging.user.UserResource;
 
 @QuarkusTest
 @DisplayName("Post")
@@ -47,7 +49,7 @@ class PostTest {
         URL postUrl;
 
         @TestHTTPResource
-        @TestHTTPEndpoint(UserEndpoint.class)
+        @TestHTTPEndpoint(UserResource.class)
         URL userUrl;
 
         @TestHTTPResource
@@ -104,8 +106,10 @@ class PostTest {
                                              .has(lenght(15));
                 var firstPage = firstPageResponse.body().as(postPage());
                 assertThat(firstPage.items()).map(Post::getContent)
-                                             .isEqualTo(range(0, 15).mapToObj(postNaming)
-                                                                                                 .toList());
+                                             .isEqualTo(range(25, 40)
+                                                                    .mapToObj(postNaming)
+                                                                    .sorted(Collections.reverseOrder())
+                                                                    .toList());
                 // validate 2nd page
                 var secondPageResponse = postLister.list(1, 15)
                                                    .response();
@@ -116,8 +120,9 @@ class PostTest {
 
                 var secondPage = secondPageResponse.body().as(postPage());
                 assertThat(secondPage.items()).map(Post::getContent)
-                                              .isEqualTo(range(15, 30).mapToObj(postNaming)
-                                                                                                   .toList());
+                                              .isEqualTo(range(10, 25).mapToObj(postNaming)
+                                                                      .sorted(Collections.reverseOrder())
+                                                                      .toList());
                 // validate 3rd page
                 var thirdPageResponse = postLister.list(2, 15)
                                                    .response();
@@ -128,8 +133,9 @@ class PostTest {
 
                 var thirdPage = thirdPageResponse.body().as(postPage());
                 assertThat(thirdPage.items()).map(Post::getContent)
-                                             .isEqualTo(range(30, 40).mapToObj(postNaming)
-                                                                                                  .toList());
+                                             .isEqualTo(range(0, 10).mapToObj(postNaming)
+                                                                    .sorted(Collections.reverseOrder())
+                                                                    .toList());
                 // validate 4rd page
                 var fourthPageResponse = postLister.list(3, 15)
                                                    .response();

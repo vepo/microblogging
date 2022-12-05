@@ -1,4 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
+import { Profile } from '../_model/user.model';
+import { faImage } from '@fortawesome/free-solid-svg-icons';
 
 @Component({
   selector: 'app-profile-header',
@@ -7,4 +9,8 @@ import { Component } from '@angular/core';
 })
 export class ProfileHeaderComponent {
 
+  @Input() profile: Profile | null = null;
+  faImage = faImage;
+
+  constructor() { }
 }

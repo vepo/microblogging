@@ -1,0 +1,53 @@
+@width-large: 14vw;
+@margin-large: -7vw;
+
+@width-small: 30vw;
+@margin-small: -15vw;
+
+.avatar {
+    img {
+        border-radius: 50%;
+        height: @width-large;
+        width: @width-large;
+        border: solid 2px #FFF;
+    }
+
+    .edit-avatar {
+        position: absolute;
+        top: calc(50% - 19px);
+        left: calc(50% - 21px);
+        opacity: 25%;
+
+        &:hover {
+            opacity: 100%;
+        }
+    }
+
+    position: relative;
+    margin-top: @margin-large;
+    margin-left: 1vw;
+    width: @width-large;
+    height: @width-large;
+}
+
+@media only screen and (max-width: 576px) {
+    .avatar {
+        img {
+            height: @width-small;
+            width: @width-small;
+            border: solid 2px #FFF;
+        }
+
+        .edit-avatar {
+            position: absolute;
+            top: calc(50% - 19px);
+            left: calc(50% - 21px);
+        }
+
+        position: relative;
+        margin-top: @margin-small;
+        margin-left: 1vw;
+        width: @width-small;
+        height: @width-small;
+    }
+}

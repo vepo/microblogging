@@ -6,3 +6,9 @@
 * https://blog.marcnuri.com/react-quarkus-integration-using-maven
 * https://www.w3.org/TR/activitypub/
 * https://coolors.co/adbca5-453f3c-8d86c9-cd4631-49306b
+
+## API
+
+### Resources
+
+The **User** resource will handle only logged user operations. All other operations will be handle by **Profile**. Each user is a **Profile**.

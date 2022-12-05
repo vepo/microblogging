@@ -1,0 +1,8 @@
+<div class="avatar">
+    <img [src]="profile.images.avatar.url" *ngIf="profile && profile.images && profile.images.avatar && profile.images.avatar.url"/>
+    <img src="https://thispersondoesnotexist.com/image" *ngIf="!profile || !profile.images || !profile.images.avatar || !profile.images.avatar.url" />
+    <button type="button" (click)="loadImage()" class="edit-avatar btn btn-light">
+        <fa-icon [icon]="faImage"></fa-icon>
+    </button>
+    <input id="file-avatar" type="file" style="display: none;" accept="image/png, image/gif, image/jpeg" (change)="uploadFile($event)" />
+</div>

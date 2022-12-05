@@ -14,6 +14,7 @@ import io.restassured.http.ContentType;
 import io.restassured.http.Header;
 import io.restassured.response.Response;
 import io.restassured.response.ValidatableResponse;
+import io.vepo.microblogging.auth.LoginResponse;
 
 public class UserActions {
 

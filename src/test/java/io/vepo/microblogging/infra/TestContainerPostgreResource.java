@@ -60,6 +60,7 @@ public class TestContainerPostgreResource
                 "quarkus.datasource.username", container.getUsername(),
                 "quarkus.datasource.password", container.getPassword(),
                 "quarkus.datasource.jdbc.url", jdbcUrl,
+                "quarkus.hibernate-orm.log.sql", "true",
                 "quarkus.hibernate-orm.database.generation", "drop-and-create");
     }
 

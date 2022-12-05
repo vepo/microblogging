@@ -7,9 +7,10 @@ import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.transaction.Transactional;
-import javax.ws.rs.WebApplicationException;
+import javax.ws.rs.ClientErrorException;
 import javax.ws.rs.core.Response.Status;
 
+import io.vepo.microblogging.image.Image;
 import io.vepo.microblogging.infra.PasswordCrypt;
 
 @Transactional
@@ -23,13 +24,13 @@ public class Users {
 
     public User create(User user) {
         if (findUserByHandle(user.getHandle()).isPresent()) {
-            throw new WebApplicationException(String.format("Handle already in use! handle=%s", user.getHandle()),
-                    Status.CONFLICT);
+            throw new ClientErrorException(String.format("Handle already in use! handle=%s", user.getHandle()),
+                                           Status.CONFLICT);
         }
 
         if (findUserByEmail(user.getEmail()).isPresent()) {
-            throw new WebApplicationException(String.format("Email already in use! email=%s", user.getEmail()),
-                    Status.CONFLICT);
+            throw new ClientErrorException(String.format("Email already in use! email=%s", user.getEmail()),
+                                           Status.CONFLICT);
         }
         user.setHashedPassword(passwordCrypt.hashPassword(user.getHashedPassword()));
         return em.merge(user);
@@ -38,30 +39,39 @@ public class Users {
 
     public Optional<User> findUserByHandle(String handle) {
         return em.createNamedQuery("user-by-handle", User.class)
-                .setParameter("handle", handle)
-                .getResultList()
-                .stream()
-                .findFirst();
+                 .setParameter("handle", handle)
+                 .getResultList()
+                 .stream()
+                 .findFirst();
     }
 
     public Optional<User> findUserByEmail(String email) {
         return em.createNamedQuery("user-by-email", User.class)
-                .setParameter("email", email)
-                .getResultList()
-                .stream()
-                .findFirst();
+                 .setParameter("email", email)
+                 .getResultList()
+                 .stream()
+                 .findFirst();
     }
 
     public Optional<User> findByHandleAndPassword(String handle, String password) {
         return em.createNamedQuery("user-login", User.class)
-                .setParameter("handle", handle)
-                .setParameter("hashedPassword", passwordCrypt.hashPassword(password))
-                .getResultList()
-                .stream()
-                .findFirst();
+                 .setParameter("handle", handle)
+                 .setParameter("hashedPassword", passwordCrypt.hashPassword(password))
+                 .getResultList()
+                 .stream()
+                 .findFirst();
     }
 
     public Optional<User> findUserById(Long userId) {
         return Optional.ofNullable(em.find(User.class, userId));
+    }
+
+    public Optional<User> updateAvatar(long userId, Image avatar) {
+        return Optional.ofNullable(em.find(User.class, userId))
+                       .map(user -> {
+                           user.setAvatar(avatar);
+                           em.merge(user);
+                           return user;
+                       });
     }
 }

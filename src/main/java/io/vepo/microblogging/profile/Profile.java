@@ -1,5 +1,7 @@
 package io.vepo.microblogging.profile;
 
-public record Profile(Long userId, String handle, ProfileImages images) {
+import java.time.LocalDateTime;
+
+public record Profile(Long userId, String handle, ProfileImages images, LocalDateTime createdAt) {
 
 }

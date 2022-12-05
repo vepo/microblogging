@@ -1,4 +1,4 @@
-package io.vepo.microblogging.user;
+package io.vepo.microblogging.auth;
 
 import static io.vepo.microblogging.user.UserActions.DEFAULT_EMAIL;
 import static io.vepo.microblogging.user.UserActions.DEFAULT_HANDLE;
@@ -20,13 +20,14 @@ import io.quarkus.test.common.http.TestHTTPEndpoint;
 import io.quarkus.test.common.http.TestHTTPResource;
 import io.quarkus.test.junit.QuarkusTest;
 import io.vepo.microblogging.infra.TestContainerPostgreResource;
+import io.vepo.microblogging.user.UserResource;
 
 @QuarkusTest
 @DisplayName("Login")
 @QuarkusTestResource(value = TestContainerPostgreResource.class)
 public class AuthenticationResourceTest {
     @TestHTTPResource
-    @TestHTTPEndpoint(UserEndpoint.class)
+    @TestHTTPEndpoint(UserResource.class)
     URL userUrl;
 
     @TestHTTPResource

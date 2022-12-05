@@ -1,3 +1,4 @@
-<app-profile-header></app-profile-header>
-{{ user | json }}
-<app-mb-timeline kind="profile" [userId]="user.id"></app-mb-timeline>
+<app-profile-header [profile]="profile"></app-profile-header>
+<app-profile-avatar class="inline" [profile]="profile"></app-profile-avatar>
+<app-profile-info class="inline" [profile]="profile"></app-profile-info>
+<app-mb-timeline kind="profile" [userId]="profile?.id || 0"></app-mb-timeline>

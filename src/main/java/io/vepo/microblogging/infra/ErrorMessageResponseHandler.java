@@ -1,6 +1,5 @@
 package io.vepo.microblogging.infra;
 
-import javax.ws.rs.BadRequestException;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.ext.ExceptionMapper;
@@ -17,7 +16,7 @@ public class ErrorMessageResponseHandler implements ExceptionMapper<WebApplicati
     public Response toResponse(WebApplicationException exception) {
         logger.info("Exception throwed! Creating request...", exception);
         return Response.status(exception.getResponse().getStatus())
-                .entity(new ErrorInformation(exception.getResponse().getStatusInfo().toString()))
+                .entity(new ErrorInformation(exception.getMessage()))
                 .build();
     }
 

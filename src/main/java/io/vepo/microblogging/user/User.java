@@ -17,6 +17,8 @@ import javax.persistence.NamedQuery;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+import io.vepo.microblogging.image.Image;
+
 @Entity
 @Table(name = "tb_users")
 @NamedQuery(name = "user-by-email", query = "FROM User where email = :email")
@@ -134,7 +136,7 @@ public class User {
 
     @Override
     public String toString() {
-        return String.format("User[id=%d, handle=%s, email=%s, hashedPassword=%s, createdAt=%s]",
-                id, handle, email, hashedPassword, createdAt);
+        return String.format("User[id=%d, handle=%s, email=%s, hashedPassword=%s, cover=%s, avatar=%s, createdAt=%s]",
+                             id, handle, email, hashedPassword, cover, avatar, createdAt);
     }
 }

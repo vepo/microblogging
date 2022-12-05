@@ -23,7 +23,8 @@ public class ProfileResource {
                 .map(user -> new Profile(user.getId(), user.getHandle(),
                         new ProfileImages(
                                 user.getCover().map(cover -> new Image("/api/image/" + cover.getId())).orElse(null),
-                                user.getAvatar().map(cover -> new Image("/api/image/" + cover.getId())).orElse(null))))
+                                user.getAvatar().map(cover -> new Image("/api/image/" + cover.getId())).orElse(null)),
+                        user.getCreatedAt()))
                 .orElseThrow(() -> new NotFoundException(String.format("User do not exists! handle=%s", handle)));
     }
 }
